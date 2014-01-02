@@ -1,3 +1,5 @@
+require File.expand_path '../../application', __FILE__
+
 if Rails.env.test?
   Catarse::Application.initializer 'test' do |app|
     config = app.config
