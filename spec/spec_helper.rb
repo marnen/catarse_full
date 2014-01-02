@@ -3,7 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'coveralls'
 Coveralls.wear!('rails')
 
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'sidekiq/testing'
 
