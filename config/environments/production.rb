@@ -1,4 +1,4 @@
-require File.expand_path '../../application', __FILE__
+require File.expand_path '../../../lib/catarse_full/engine', __FILE__
 
 if Rails.env.production?
   Catarse::Application.initializer 'production' do |app|
