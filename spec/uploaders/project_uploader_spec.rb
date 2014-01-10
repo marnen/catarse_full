@@ -7,7 +7,7 @@ describe ProjectUploader do
   before do
     ProjectUploader.enable_processing = true
     @uploader = ProjectUploader.new(project, :uploaded_image)
-    @uploader.store!(File.open(File.expand_path '../../fixtures/image.png', __FILE__))
+    @uploader.store!(File.open("#{Catarse::Engine.root}/spec/fixtures/image.png"))
   end
 
   after do
