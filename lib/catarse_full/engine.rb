@@ -17,8 +17,8 @@ module Catarse
     #NOTE: the custom view path is for build a new style without need to
     # edit the catarse_views
     config.paths['app/views'].unshift(
-      "#{Rails.root}/app/views/custom",
-      "#{Rails.root}/app/views/catarse_bootstrap")
+      "#{Catarse::Engine.root}/app/views/custom",
+      "#{Catarse::Engine.root}/app/views/catarse_bootstrap")
 
     config.active_record.schema_format = :sql
 

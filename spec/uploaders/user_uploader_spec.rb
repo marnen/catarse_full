@@ -7,7 +7,7 @@ describe UserUploader do
   before do
     UserUploader.enable_processing = true
     @uploader = UserUploader.new(user, :uploaded_image)
-    @uploader.store!(File.open("#{Rails.root}/spec/fixtures/image.png"))
+    @uploader.store!(File.open("#{Catarse::Engine.root}/spec/fixtures/image.png"))
   end
 
   after do
