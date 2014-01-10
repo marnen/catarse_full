@@ -10,36 +10,40 @@ end
 
 module Catarse
   class Engine < ::Rails::Engine
-    initializer "catarse" do |app|
+    config.to_prepare do
+      Devise::Mailer.layout "email" # email.haml or email.erb
+    end
+
+    #NOTE: the custom view path is for build a new style without need to
+    # edit the catarse_views
+    config.paths['app/views'].unshift(
+      "#{Rails.root}/app/views/custom",
+      "#{Rails.root}/app/views/catarse_bootstrap")
+
+    config.active_record.schema_format = :sql
+
+    # Since Rails 3.1, all folders inside app/ will be loaded automatically
+    config.autoload_paths += %W(#{config.root}/lib #{config.root}/lib/**)
+
+    # Default encoding for the server
+    config.encoding = "utf-8"
+
+    initializer 'filter_parameters' do |app|
+      app.config.filter_parameters += [:password, :password_confirmation]
+    end
+
+    config.time_zone = 'Brasilia'
+    config.active_record.default_timezone = :local
+    config.generators do |g|
+      g.test_framework :rspec, fixture: false, views: false
+    end
+    config.active_record.observers = [
+      :backer_observer, :user_observer, :notification_observer,
+      :update_observer, :project_observer, :payment_notification_observer
+    ]
+
+    initializer 'assets' do |app|
       config = app.config
-      config.to_prepare do
-        Devise::Mailer.layout "email" # email.haml or email.erb
-      end
-
-      #NOTE: the custom view path is for build a new style without need to
-      # edit the catarse_views
-      config.paths['app/views'].unshift(
-        "#{Rails.root}/app/views/custom",
-        "#{Rails.root}/app/views/catarse_bootstrap")
-
-      config.active_record.schema_format = :sql
-
-      # Since Rails 3.1, all folders inside app/ will be loaded automatically
-      config.autoload_paths += %W(#{config.root}/lib #{config.root}/lib/**)
-
-      # Default encoding for the server
-      config.encoding = "utf-8"
-
-      config.filter_parameters += [:password, :password_confirmation]
-      config.time_zone = 'Brasilia'
-      config.active_record.default_timezone = :local
-      config.generators do |g|
-        g.test_framework :rspec, fixture: false, views: false
-      end
-      config.active_record.observers = [
-        :backer_observer, :user_observer, :notification_observer,
-        :update_observer, :project_observer, :payment_notification_observer
-      ]
 
       # Enable the asset pipeline
       config.assets.enabled = true
