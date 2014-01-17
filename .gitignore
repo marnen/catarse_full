@@ -2,7 +2,6 @@
 db/*.sqlite3
 log/*.log
 tmp/**/*
-config/database.yml
 db/seeds/my-seeds-local.rb
 db/seeds/my-seeds-heroku.rb
 db/development_structure.sql
@@ -27,3 +26,4 @@ spec/dummy/log/*.log
 spec/dummy/tmp/
 spec/dummy/.sass-cache
 spec/dummy/public/uploads
+spec/dummy/config/database.yml
