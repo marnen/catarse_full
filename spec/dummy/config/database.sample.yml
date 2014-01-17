@@ -12,7 +12,7 @@ development:
   adapter: postgresql
   encoding: unicode
   host: localhost
-  database: catarse_development
+  database: catarse_full_development
   pool: 5
   username: postgres
   password: password
@@ -41,7 +41,7 @@ test:
   adapter: postgresql
   encoding: unicode
   host: localhost
-  database: catarse_test
+  database: catarse_full_test
   pool: 5
   username: postgres
   password: password
