@@ -29,12 +29,12 @@ describe ProjectDecorator do
     end
 
     context "when we have a video_thumbnail" do
-      let(:project){ create(:project, video_thumbnail: File.open("#{Rails.root}/spec/fixtures/image.png")) }
+      let(:project){ create(:project, video_thumbnail: File.open("#{Catarse::Engine.root}/spec/fixtures/image.png")) }
       it{ should == project.video_thumbnail.project_thumb.url }
     end
 
     context "when we have an uploaded_image" do
-      let(:project){ create(:project, uploaded_image: File.open("#{Rails.root}/spec/fixtures/image.png"), video_thumbnail: nil) }
+      let(:project){ create(:project, uploaded_image: File.open("#{Catarse::Engine.root}/spec/fixtures/image.png"), video_thumbnail: nil) }
       it{ should == project.uploaded_image.project_thumb.url }
     end
   end

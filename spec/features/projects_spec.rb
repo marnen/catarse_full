@@ -57,6 +57,8 @@ describe "Projects" do
 
 
   describe "new and create" do
+    let!(:category) { create :category }
+
     before do
       login
       visit new_project_path(locale: :pt)
@@ -71,6 +73,7 @@ describe "Projects" do
       ].each do |a|
         fill_in "project_#{a}", with: project.attributes[a]
       end
+      select category.name_pt, from: 'project_category_id'
       check 'project_accepted_terms'
       find('#project_submit').click
       #Project.first.name.should == project.name

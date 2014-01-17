@@ -532,7 +532,7 @@ describe Project do
     let(:project){ build(:project) }
     before do
       project.should_receive(:download_video_thumbnail).and_call_original
-      project.should_receive(:open).and_return(File.open("#{Rails.root}/spec/fixtures/image.png"))
+      project.should_receive(:open).and_return(File.open("#{Catarse::Engine.root}/spec/fixtures/image.png"))
       project.save!
     end
 
