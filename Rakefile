@@ -39,7 +39,7 @@ RSpec::Core::RakeTask.new(:spec => 'app:db:test:prepare')
 
 task :default => :spec
 
-require File.expand_path('../config/application', __FILE__)
+require File.expand_path('../lib/catarse_full/engine', __FILE__)
 require 'rake'
 
 Catarse::Application.load_tasks
