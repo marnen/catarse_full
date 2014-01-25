@@ -19,11 +19,14 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.12"
   # s.add_dependency "jquery-rails"
 
-  s.add_development_dependency 'pg'
-
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'capybara'
-  s.add_development_dependency 'factory_girl_rails'
-  s.add_development_dependency 'byebug'
-  s.add_development_dependency 'guard-rspec'
+  [
+    'pg',
+    'rspec-rails',
+    'capybara',
+    'factory_girl_rails',
+    'byebug',
+    'guard-rspec'
+  ].each do |gem|
+    s.add_development_dependency gem
+  end
 end
