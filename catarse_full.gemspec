@@ -86,7 +86,7 @@ Gem::Specification.new do |s|
     ['inherited_resources', '1.3.1'],
     'has_scope',
     'spectator-validates_email', # require: 'validates_email'
-    ['video_info', '>= 1.1.1'],
+    ['video_info', '>= 1.1.1', '< 2'],
     'enumerate_it',
     ['httparty', '~> 0.6.1'], # this version is required by moip gem, otherwise payment confirmation will break
 
