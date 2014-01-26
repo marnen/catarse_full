@@ -8,6 +8,20 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+# Load gem dependencies; see http://stackoverflow.com/a/21293071/109011
+Gem.loaded_specs["catarse_full"].runtime_dependencies.each do |d|
+  begin
+    # Format: {gem_name => require_as}
+    mappings = {
+      'spectator-validates_email' => 'validates_email'
+    }
+    require(mappings[d.name] || d.name)
+  # rescue LoadError => le
+  #   # Put exceptions here.
+  #   raise le if d.name !~ /factory_girl_rails/
+  end
+end
+
 module Catarse
   class Engine < ::Rails::Engine
     config.to_prepare do
