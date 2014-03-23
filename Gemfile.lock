@@ -118,7 +118,7 @@ GEM
     celluloid (0.14.1)
       timers (>= 1.0.0)
     chartkick (1.2.0)
-    childprocess (0.3.9)
+    childprocess (0.5.1)
       ffi (~> 1.0, >= 1.0.11)
     chunky_png (1.2.8)
     coderay (1.0.9)
@@ -183,7 +183,7 @@ GEM
       loofah (>= 0.3.1)
       nokogiri (> 0.0.0)
       sax-machine (>= 0.0.12)
-    ffi (1.9.0)
+    ffi (1.9.3)
     fog (1.14.0)
       builder
       excon (~> 0.25.0)
@@ -250,7 +250,7 @@ GEM
     mime-types (1.25.1)
     money (5.1.1)
       i18n (~> 0.6.0)
-    multi_json (1.8.2)
+    multi_json (1.9.2)
     multipart-post (1.2.0)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
@@ -359,7 +359,7 @@ GEM
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
     ruby-hmac (0.4.0)
-    rubyzip (0.9.9)
+    rubyzip (1.1.2)
     sass (3.2.10)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -372,10 +372,10 @@ GEM
     schema_plus (1.1.2)
       rails (>= 3.2)
       valuable
-    selenium-webdriver (2.34.0)
-      childprocess (>= 0.2.5)
+    selenium-webdriver (2.40.0)
+      childprocess (>= 0.5.0)
       multi_json (~> 1.0)
-      rubyzip
+      rubyzip (~> 1.0)
       websocket (~> 1.0.4)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -509,7 +509,7 @@ DEPENDENCIES
   sass-rails
   schema_associations
   schema_plus
-  selenium-webdriver (~> 2.34.0)
+  selenium-webdriver (~> 2.34)
   shoulda
   sidekiq (~> 2.13.0)
   sinatra
