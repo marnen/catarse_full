@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe "Users" do
   before do
+    ::Configuration[:base_url] = 'http://catarse.me' # to get gravatar to work properly
     create(:notification_type, name: 'updates')
     OauthProvider.create! name: 'facebook', key: 'dummy_key', secret: 'dummy_secret'
   end
