@@ -48,7 +48,7 @@ PATH
       draper
       enumerate_it
       ezcrypto
-      feedzirra
+      feedzirra (~> 0.0.24)
       formtastic (~> 2.2.1)
       has_scope
       http_accept_language

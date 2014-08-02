@@ -81,7 +81,7 @@ Gem::Specification.new do |s|
 
     # Other Tools
     'ranked-model',
-    'feedzirra',
+    ['feedzirra', '~> 0.0.24'],
     'validation_reflection', #      git: 'git://github.com/ncri/validation_reflection.git'
     ['inherited_resources', '1.3.1'],
     'has_scope',
