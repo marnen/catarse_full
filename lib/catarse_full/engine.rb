@@ -13,6 +13,7 @@ Gem.loaded_specs["catarse_full"].runtime_dependencies.each do |d|
   begin
     # Format: {gem_name => require_as}
     mappings = {
+      'marnen-catarse_mailchimp' => 'catarse_mailchimp',
       'rmagick' => 'RMagick',
       'spectator-validates_email' => 'validates_email'
     }

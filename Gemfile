@@ -21,9 +21,6 @@ ruby '2.0.0'
 # In resume: this version of cancan allow checking for authorization on specific fields on the model
 gem 'cancan', git: 'git://github.com/ryanb/cancan.git', branch: '2.0', ref: 'f1cebde51a87be149b4970a3287826bb63c0ac0b'
 
-# Email marketing
-gem 'catarse_mailchimp', git: 'git://github.com/catarse/catarse_mailchimp', ref: '2ed4f3931dfa292e5c1c62619772f04e41c68629'
-
 # Other Tools
 gem 'validation_reflection',      git: 'git://github.com/ncri/validation_reflection.git'
 
