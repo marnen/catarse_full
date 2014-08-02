@@ -8,12 +8,6 @@ GIT
       httparty (~> 0.6.1)
       nokogiri (~> 1.5.0)
 
-GIT
-  remote: git://github.com/ncri/validation_reflection.git
-  revision: 60320e6beb088808fd625a8d958dbd0d2661d494
-  specs:
-    validation_reflection (1.0.0)
-
 PATH
   remote: .
   specs:
@@ -42,6 +36,7 @@ PATH
       marnen-cancan (= 2.0.0.alpha.pre.f1cebde51a87be149b4970a3287826bb63c0ac0b)
       marnen-catarse_mailchimp (= 0.0.1.pre.2ed4f3931dfa292e5c1c62619772f04e41c68629z)
       moip
+      marnen-validation_reflection (= 1.0.0.60320e6beb088808fd625a8d958dbd0d2661d494)
       omniauth
       omniauth-facebook (= 1.4.0)
       omniauth-twitter
@@ -297,6 +292,8 @@ GEM
     marnen-catarse_mailchimp (0.0.1.pre.2ed4f3931dfa292e5c1c62619772f04e41c68629z)
       mailchimp
       supermodel
+    marnen-validation_reflection (1.0.0.60320e6beb088808fd625a8d958dbd0d2661d494)
+      marnen-validation_reflection
     method_source (0.8.2)
     mime-types (1.25.1)
     money (5.1.1)
@@ -535,5 +532,4 @@ DEPENDENCIES
   shoulda
   uglifier
   unicorn
-  validation_reflection!
   weekdays

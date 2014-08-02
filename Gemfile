@@ -17,9 +17,6 @@ ruby '2.0.0'
 
 # We got some weird bug concerning encoding of AR objects in rails 3.2.13+
 
-# Other Tools
-gem 'validation_reflection',      git: 'git://github.com/ncri/validation_reflection.git'
-
 # Payment
 gem 'moip', git: 'git://github.com/catarse/moip-ruby.git', ref: '39f9dab'
 
