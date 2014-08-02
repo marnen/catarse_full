@@ -17,10 +17,6 @@ ruby '2.0.0'
 
 # We got some weird bug concerning encoding of AR objects in rails 3.2.13+
 
-# See https://github.com/ryanb/cancan/tree/2.0 for help about this
-# In resume: this version of cancan allow checking for authorization on specific fields on the model
-gem 'cancan', git: 'git://github.com/ryanb/cancan.git', branch: '2.0', ref: 'f1cebde51a87be149b4970a3287826bb63c0ac0b'
-
 # Other Tools
 gem 'validation_reflection',      git: 'git://github.com/ncri/validation_reflection.git'
 

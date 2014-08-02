@@ -14,14 +14,6 @@ GIT
   specs:
     validation_reflection (1.0.0)
 
-GIT
-  remote: git://github.com/ryanb/cancan.git
-  revision: f1cebde51a87be149b4970a3287826bb63c0ac0b
-  ref: f1cebde51a87be149b4970a3287826bb63c0ac0b
-  branch: 2.0
-  specs:
-    cancan (2.0.0.alpha)
-
 PATH
   remote: .
   specs:
@@ -29,7 +21,6 @@ PATH
       activemerchant (>= 1.17.0)
       auto_html (= 1.4.2)
       best_in_place
-      cancan
       carrierwave (~> 0.8.0)
       catarse_moip (~> 1.0.9)
       catarse_paypal_express (~> 1.0.0)
@@ -48,6 +39,7 @@ PATH
       jquery-rails
       kaminari
       mail (= 2.5.3)
+      marnen-cancan (= 2.0.0.alpha.pre.f1cebde51a87be149b4970a3287826bb63c0ac0b)
       marnen-catarse_mailchimp (= 0.0.1.pre.2ed4f3931dfa292e5c1c62619772f04e41c68629z)
       moip
       omniauth
@@ -185,7 +177,7 @@ GEM
       simplecov (>= 0.7)
       thor
     crack (0.1.8)
-    curb (0.8.5)
+    curb (0.8.6)
     database_cleaner (1.1.1)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
@@ -293,8 +285,8 @@ GEM
       celluloid-io (>= 0.15.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    loofah (1.2.1)
-      nokogiri (>= 1.4.4)
+    loofah (2.0.0)
+      nokogiri (>= 1.5.9)
     lumberjack (1.0.5)
     mail (2.5.3)
       i18n (>= 0.4.0)
@@ -302,6 +294,7 @@ GEM
       treetop (~> 1.4.8)
     mailchimp (0.0.9)
       httparty
+    marnen-cancan (2.0.0.alpha.pre.f1cebde51a87be149b4970a3287826bb63c0ac0b)
     marnen-catarse_mailchimp (0.0.1.pre.2ed4f3931dfa292e5c1c62619772f04e41c68629z)
       mailchimp
       supermodel
@@ -516,7 +509,6 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   byebug
-  cancan!
   capybara (~> 2.0.2)
   catarse_full!
   coffee-rails
