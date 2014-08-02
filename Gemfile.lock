@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/catarse/catarse_mailchimp
   revision: 2ed4f3931dfa292e5c1c62619772f04e41c68629
-  ref: 2ed4f39
+  ref: 2ed4f3931dfa292e5c1c62619772f04e41c68629
   specs:
     catarse_mailchimp (0.0.1)
       mailchimp
@@ -10,6 +10,7 @@ GIT
 GIT
   remote: git://github.com/catarse/moip-ruby.git
   revision: 39f9dab38fc33fe9bf614deb8e90ca166ab2d6bf
+  ref: 39f9dab
   specs:
     moip (1.0.2)
       activesupport (>= 2.3.2)
