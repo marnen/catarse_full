@@ -1,13 +1,3 @@
-GIT
-  remote: git://github.com/catarse/moip-ruby.git
-  revision: 39f9dab38fc33fe9bf614deb8e90ca166ab2d6bf
-  ref: 39f9dab
-  specs:
-    moip (1.0.2)
-      activesupport (>= 2.3.2)
-      httparty (~> 0.6.1)
-      nokogiri (~> 1.5.0)
-
 PATH
   remote: .
   specs:
@@ -27,7 +17,7 @@ PATH
       formtastic (~> 2.2.1)
       has_scope
       http_accept_language
-      httparty (~> 0.6.1)
+      httparty
       httpclient (>= 2.2.5)
       inherited_resources (= 1.3.1)
       jquery-rails
@@ -35,7 +25,7 @@ PATH
       mail (= 2.5.3)
       marnen-cancan (= 2.0.0.alpha.pre.f1cebde51a87be149b4970a3287826bb63c0ac0b)
       marnen-catarse_mailchimp (= 0.0.1.pre.2ed4f3931dfa292e5c1c62619772f04e41c68629z)
-      moip
+      marnen-moip (= 1.0.2.pre.39f9dab38fc33fe9bf614deb8e90ca166ab2d6bf)
       marnen-validation_reflection (= 1.0.0.60320e6beb088808fd625a8d958dbd0d2661d494)
       omniauth
       omniauth-facebook (= 1.4.0)
@@ -55,7 +45,6 @@ PATH
       slim-rails (~> 1.1.1)
       spectator-validates_email
       state_machine
-      validation_reflection
       video_info (>= 1.1.1, < 1.6)
 
 GEM
@@ -292,6 +281,10 @@ GEM
     marnen-catarse_mailchimp (0.0.1.pre.2ed4f3931dfa292e5c1c62619772f04e41c68629z)
       mailchimp
       supermodel
+    marnen-moip (1.0.2.pre.39f9dab38fc33fe9bf614deb8e90ca166ab2d6bf)
+      activesupport (>= 2.3.2)
+      httparty (~> 0.6.1)
+      nokogiri (~> 1.5.0)
     marnen-validation_reflection (1.0.0.60320e6beb088808fd625a8d958dbd0d2661d494)
       marnen-validation_reflection
     method_source (0.8.2)
@@ -520,7 +513,6 @@ DEPENDENCIES
   jasmine
   launchy
   letter_opener
-  moip!
   newrelic_rpm (= 3.6.5.130)
   pg
   pry

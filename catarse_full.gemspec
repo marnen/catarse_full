@@ -88,14 +88,14 @@ Gem::Specification.new do |s|
     'spectator-validates_email', # require: 'validates_email'
     ['video_info', '>= 1.1.1', '< 1.6'],
     'enumerate_it',
-    ['httparty', '~> 0.6.1'], # this version is required by moip gem, otherwise payment confirmation will break
+    'httparty',
 
     # Translations
     'http_accept_language',
     'routing-filter',
 
     # Payment
-    'moip', # git: 'git://github.com/catarse/moip-ruby.git'
+    ['marnen-moip', '= 1.0.2.pre.39f9dab38fc33fe9bf614deb8e90ca166ab2d6bf'],
     ['activemerchant', '>= 1.17.0'], # require: 'active_merchant'
     ['httpclient', '>= 2.2.5']
   ].each do |gem|
