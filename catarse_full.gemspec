@@ -65,10 +65,10 @@ Gem::Specification.new do |s|
 
     # See https://github.com/ryanb/cancan/tree/2.0 for help about this
     # In resume: this version of cancan allow checking for authorization on specific fields on the model
-    'cancan', # git: 'git://github.com/ryanb/cancan.git', branch: '2.0', ref: 'f1cebde51a87be149b4970a3287826bb63c0ac0b'
+    ['marnen-cancan', '= 2.0.0.alpha.pre.f1cebde51a87be149b4970a3287826bb63c0ac0b'],
 
     # Email marketing
-    'catarse_mailchimp', # git: 'git://github.com/catarse/catarse_mailchimp', ref: '2ed4f39'
+    ['marnen-catarse_mailchimp', '= 0.0.1.pre.2ed4f3931dfa292e5c1c62619772f04e41c68629z'],
 
     # HTML manipulation and formatting
     ['formtastic', '~> 2.2.1'],
@@ -81,21 +81,21 @@ Gem::Specification.new do |s|
 
     # Other Tools
     'ranked-model',
-    'feedzirra',
-    'validation_reflection', #      git: 'git://github.com/ncri/validation_reflection.git'
+    ['feedzirra', '>= 0.0.24', '< 0.8'],
+    ['marnen-validation_reflection', '= 1.0.0.60320e6beb088808fd625a8d958dbd0d2661d494'], # based on ncri/validation_reflection
     ['inherited_resources', '1.3.1'],
     'has_scope',
     'spectator-validates_email', # require: 'validates_email'
-    ['video_info', '>= 1.1.1', '< 2'],
+    ['video_info', '>= 1.1.1', '< 1.6'],
     'enumerate_it',
-    ['httparty', '~> 0.6.1'], # this version is required by moip gem, otherwise payment confirmation will break
+    'httparty',
 
     # Translations
     'http_accept_language',
     'routing-filter',
 
     # Payment
-    'moip', # git: 'git://github.com/catarse/moip-ruby.git'
+    ['marnen-moip', '= 1.0.2.pre.39f9dab38fc33fe9bf614deb8e90ca166ab2d6bf'],
     ['activemerchant', '>= 1.17.0'], # require: 'active_merchant'
     ['httpclient', '>= 2.2.5']
   ].each do |gem|
