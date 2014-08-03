@@ -17,30 +17,6 @@ ruby '2.0.0'
 
 # We got some weird bug concerning encoding of AR objects in rails 3.2.13+
 
-group :production do
-  gem 'google-analytics-rails'
-
-  # Gem used to handle image uploading
-  gem 'fog', '>= 1.3.1'
-
-  # Workers, forks and all that jazz
-  gem 'unicorn'
-
-  # Enabling Gzip on Heroku
-  # If you don't use Heroku, please comment the line below.
-  gem 'heroku-deflater', '>= 0.4.1'
-
-
-  # Monitoring with the new new relic
-  gem 'newrelic_rpm', '3.6.5.130'
-
-  # Using dalli and memcachier have not presented significative performance gains
-  # Probably this is due to our pattern of cache usage
-  # + the lack of concurrent procs in our deploy
-  #gem 'memcachier'
-  #gem 'dalli'
-end
-
 group :development do
   gem "letter_opener"
   gem 'foreman'

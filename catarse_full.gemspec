@@ -102,6 +102,26 @@ Gem::Specification.new do |s|
     s.add_dependency *gem
   end
 
+  # Production group
+  [
+    'google-analytics-rails',
+    ['fog', '>= 1.3.1'],
+    'unicorn',
+    ['newrelic_rpm', '3.6.5.130'],
+
+    # Enabling Gzip on Heroku
+    # Not necessary on other hosts.
+    # ['heroku-deflater', '>= 0.4.1'],
+
+    # Using dalli and memcachier have not presented significative performance gains
+    # Probably this is due to our pattern of cache usage
+    # + the lack of concurrent procs in our deploy
+    #gem 'memcachier'
+    #gem 'dalli'
+  ].each do |gem|
+    s.add_dependency *gem
+  end
+
   [
     'pg',
     'rspec-rails',
