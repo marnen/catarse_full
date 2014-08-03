@@ -13,7 +13,7 @@ PATH
       draper
       enumerate_it
       ezcrypto
-      feedzirra (~> 0.0.24)
+      feedzirra (>= 0.0.24, < 0.8)
       formtastic (~> 2.2.1)
       has_scope
       http_accept_language
@@ -298,7 +298,7 @@ GEM
     net-ssh (2.6.8)
     newrelic_rpm (3.6.5.130)
     nio4r (1.0.0)
-    nokogiri (1.5.10)
+    nokogiri (1.5.11)
     oauth (0.4.7)
     oauth2 (0.8.1)
       faraday (~> 0.8)
