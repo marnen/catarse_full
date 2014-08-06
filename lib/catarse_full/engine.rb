@@ -14,14 +14,10 @@ Gem.loaded_specs["catarse_full"].runtime_dependencies.each do |d|
     # Format: {gem_name => require_as}
     mappings = {
       'compass-960-plugin' => false,
-      'marnen-cancan' => 'cancan',
-      'marnen-catarse_mailchimp' => 'catarse_mailchimp',
-      'marnen-moip' => 'moip',
-      'marnen-validation_reflection' => 'validation_reflection',
       'rmagick' => 'RMagick',
       'spectator-validates_email' => 'validates_email'
     }
-    gem_to_require = mappings.has_key?(d.name) ? mappings[d.name] : d.name
+    gem_to_require = mappings.has_key?(d.name) ? mappings[d.name] : d.name.gsub(%r{\Amarnen-}, '')
     require gem_to_require if gem_to_require
   # rescue LoadError => le
   #   # Put exceptions here.
