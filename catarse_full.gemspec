@@ -100,12 +100,9 @@ Gem::Specification.new do |s|
     ['marnen-moip', '= 1.0.2.pre.39f9dab38fc33fe9bf614deb8e90ca166ab2d6bf'],
     ['activemerchant', '>= 1.17.0'], # require: 'active_merchant'
     ['httpclient', '>= 2.2.5']
-  ].each do |gem|
-    s.add_dependency *gem
-  end
+  ]
 
-  # Production group
-  [
+  dependencies[:production] = [
     'google-analytics-rails',
     ['fog', '>= 1.3.1'],
     'unicorn',
@@ -120,12 +117,9 @@ Gem::Specification.new do |s|
     # + the lack of concurrent procs in our deploy
     # 'memcachier',
     # 'dalli'
-  ].each do |gem|
-    s.add_dependency *gem
-  end
+  ]
 
-  # Doubtful dependencies
-  [
+  dependencies[:doubtful] = [
     # FIXME: Not-anymore-on-development
     # Gems that are with 1 or more years on the vacuum
     'weekdays',
@@ -140,8 +134,7 @@ Gem::Specification.new do |s|
     s.add_dependency *gem
   end
 
-  # Assets group
-  [
+  dependencies[:assets] = [
     'sass-rails',
     'coffee-rails',
     "compass-rails",
@@ -151,14 +144,18 @@ Gem::Specification.new do |s|
     s.add_dependency *gem
   end
 
-  [
+  dependencies[:development] = [
     'pg',
     'rspec-rails',
     'capybara',
     'factory_girl_rails',
     'byebug',
     'guard-rspec'
-  ].each do |gem|
-    s.add_development_dependency gem
+  ]
+
+  dependencies[:runtime, :production, :doubtful, :assets].each do |group|
+    group.each {|gem| s.add_dependency *gem }
   end
+
+  dependencies[:development].each {|gem| s.add_development_dependency *gem }
 end
