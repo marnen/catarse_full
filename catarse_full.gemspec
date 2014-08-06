@@ -130,9 +130,7 @@ Gem::Specification.new do |s|
 
     # TODO: Take a look on dependencies
     "RedCloth"
-  ].each do |gem|
-    s.add_dependency *gem
-  end
+  ]
 
   dependencies[:assets] = [
     'coffee-rails',
@@ -140,9 +138,7 @@ Gem::Specification.new do |s|
     "compass-rails",
     'sass-rails',
     'uglifier'
-  ].each do |gem|
-    s.add_dependency *gem
-  end
+  ]
 
   dependencies[:development] = [
     'byebug',
@@ -153,9 +149,6 @@ Gem::Specification.new do |s|
     'rspec-rails'
   ]
 
-  dependencies[:runtime, :production, :doubtful, :assets].each do |group|
-    group.each {|gem| s.add_dependency *gem }
-  end
-
+  dependencies.values_at(:runtime, :production, :doubtful, :assets).flatten(1).each {|gem| s.add_dependency *gem }
   dependencies[:development].each {|gem| s.add_development_dependency *gem }
 end
