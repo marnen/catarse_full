@@ -15,8 +15,10 @@ Gem::Specification.new do |s|
   s.description = "Gem packaging of Catarse, a crowdfunding application."
   s.license     = 'MIT'
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.test_files = Dir["spec/**/*"]
+  files = `git ls-files -z`.split("\x0")
+  s.files = files.grep(%r{^(app|config|db|lib)/})
+  s.files += ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.test_files = files.grep(%r{^(spec)/})
 
   dependencies = {}
 
