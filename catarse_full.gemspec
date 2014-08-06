@@ -103,10 +103,10 @@ Gem::Specification.new do |s|
   ]
 
   dependencies[:production] = [
-    'google-analytics-rails',
     ['fog', '>= 1.3.1'],
-    'unicorn',
+    'google-analytics-rails',
     ['newrelic_rpm', '3.6.5.130'],
+    'unicorn',
 
     # Enabling Gzip on Heroku
     # Not necessary on other hosts.
@@ -135,22 +135,22 @@ Gem::Specification.new do |s|
   end
 
   dependencies[:assets] = [
-    'sass-rails',
     'coffee-rails',
+    'compass-960-plugin',
     "compass-rails",
-    'uglifier',
-    'compass-960-plugin'
+    'sass-rails',
+    'uglifier'
   ].each do |gem|
     s.add_dependency *gem
   end
 
   dependencies[:development] = [
-    'pg',
-    'rspec-rails',
+    'byebug',
     'capybara',
     'factory_girl_rails',
-    'byebug',
-    'guard-rspec'
+    'guard-rspec',
+    'pg',
+    'rspec-rails'
   ]
 
   dependencies[:runtime, :production, :doubtful, :assets].each do |group|
