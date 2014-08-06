@@ -41,14 +41,3 @@ group :test do
   gem 'coveralls', require: false
   gem "selenium-webdriver", "~> 2.34"
 end
-
-# FIXME: Not-anymore-on-development
-# Gems that are with 1 or more years on the vacuum
-gem 'weekdays'
-gem "rack-timeout"
-
-# TODO: Take a look on dependencies. Why not auto_html?
-gem 'rails_autolink', '~> 1.0.7'
-
-# TODO: Take a look on dependencies
-gem "RedCloth"

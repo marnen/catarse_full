@@ -116,8 +116,24 @@ Gem::Specification.new do |s|
     # Using dalli and memcachier have not presented significative performance gains
     # Probably this is due to our pattern of cache usage
     # + the lack of concurrent procs in our deploy
-    #gem 'memcachier'
-    #gem 'dalli'
+    # 'memcachier',
+    # 'dalli'
+  ].each do |gem|
+    s.add_dependency *gem
+  end
+
+  # Doubtful dependencies
+  [
+    # FIXME: Not-anymore-on-development
+    # Gems that are with 1 or more years on the vacuum
+    'weekdays',
+    "rack-timeout",
+
+    # TODO: Take a look on dependencies. Why not auto_html?
+    ['rails_autolink', '~> 1.0.7'],
+
+    # TODO: Take a look on dependencies
+    "RedCloth"
   ].each do |gem|
     s.add_dependency *gem
   end

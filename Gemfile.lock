@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     catarse_full (0.0.1)
+      RedCloth
       activemerchant (>= 1.17.0)
       auto_html (= 1.4.2)
       best_in_place
@@ -40,7 +41,9 @@ PATH
       pg
       pg_search
       postgres-copy (~> 0.6.0)
+      rack-timeout
       rails (= 3.2.13)
+      rails_autolink (~> 1.0.7)
       ranked-model
       rmagick
       routing-filter
@@ -55,6 +58,7 @@ PATH
       uglifier
       unicorn
       video_info (>= 1.1.1, < 1.6)
+      weekdays
 
 GEM
   remote: https://rubygems.org/
@@ -500,7 +504,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  RedCloth
   better_errors
   binding_of_caller
   byebug
@@ -516,9 +519,6 @@ DEPENDENCIES
   letter_opener
   pg
   pry
-  rack-timeout
-  rails_autolink (~> 1.0.7)
   rspec-rails
   selenium-webdriver (~> 2.34)
   shoulda
-  weekdays
