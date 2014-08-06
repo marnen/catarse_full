@@ -9,6 +9,9 @@ PATH
       catarse_moip (~> 1.0.9)
       catarse_paypal_express (~> 1.0.0)
       chartkick
+      coffee-rails
+      compass-960-plugin
+      compass-rails
       devise
       draper
       enumerate_it
@@ -41,6 +44,7 @@ PATH
       ranked-model
       rmagick
       routing-filter
+      sass-rails
       schema_associations
       schema_plus
       sidekiq (~> 2.13.0)
@@ -48,6 +52,7 @@ PATH
       slim-rails (~> 1.1.1)
       spectator-validates_email
       state_machine
+      uglifier
       unicorn
       video_info (>= 1.1.1, < 1.6)
 
@@ -501,9 +506,6 @@ DEPENDENCIES
   byebug
   capybara (~> 2.0.2)
   catarse_full!
-  coffee-rails
-  compass-960-plugin
-  compass-rails
   coveralls
   database_cleaner
   factory_girl_rails
@@ -517,8 +519,6 @@ DEPENDENCIES
   rack-timeout
   rails_autolink (~> 1.0.7)
   rspec-rails
-  sass-rails
   selenium-webdriver (~> 2.34)
   shoulda
-  uglifier
   weekdays

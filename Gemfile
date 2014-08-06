@@ -42,17 +42,6 @@ group :test do
   gem "selenium-webdriver", "~> 2.34"
 end
 
-
-group :assets do
-  gem 'sass-rails'
-  gem 'coffee-rails'
-  gem "compass-rails"
-  gem 'uglifier'
-  gem 'compass-960-plugin'
-end
-
-
-
 # FIXME: Not-anymore-on-development
 # Gems that are with 1 or more years on the vacuum
 gem 'weekdays'

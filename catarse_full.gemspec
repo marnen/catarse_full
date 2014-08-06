@@ -122,6 +122,17 @@ Gem::Specification.new do |s|
     s.add_dependency *gem
   end
 
+  # Assets group
+  [
+    'sass-rails',
+    'coffee-rails',
+    "compass-rails",
+    'uglifier',
+    'compass-960-plugin'
+  ].each do |gem|
+    s.add_dependency *gem
+  end
+
   [
     'pg',
     'rspec-rails',

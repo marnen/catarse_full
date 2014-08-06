@@ -1,0 +1,1435 @@
+[Coveralls] Set up the SimpleCov formatter.
+[Coveralls] Using SimpleCov's 'rails' settings.
+
+Channels::ChannelsSubscribersController
+  GET index
+    should redirect to "/"
+  POST create
+    when user already has a subscription
+      should redirect to "/"
+    when user is signed in
+      should redirect to "/"
+    when no user is signed in
+      should redirect to "/sign_up"
+  DELETE destroy
+    when signed in user does not own the subscription
+      should not be successful
+    when signed in user owns the subscription
+      should redirect to "/"
+
+Statistics
+  #total_users
+    should == 5
+  #total_backs
+    should == 2
+  #total_projects_success
+    should == 1
+  #total_backed
+    should == #<BigDecimal:7fa6db39c8d8,'0.2E2',9(18)>
+  #total_projects
+    should == 2
+  #total_projects_online
+    should == 1
+  #total_backers
+    should == 2
+
+PaymentNotificationObserver
+  before_save
+    when payment is approved
+      should not notify the backer
+    when payment is being processed
+      should notify the backer
+
+OmniauthCallbacksController
+  GET facebook
+    when user not loged in
+      when there is no such user but we retrieve the email from omniauth
+        should redirect to "/"
+        assigned user
+          name
+            should == "Diogo, Biazus"
+          email
+            should == "diogob@gmail.com"
+      when there is a valid user with this provider and uid and session return_to is /foo
+        should redirect to "/foo"
+        should == #<User id: 54, email: "person51@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:13", updated_at: "2014-01-10 20:59:13", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$lwWxoru/g//TSZyNxqU.t.PRS5.mYIDgp7pFbBPUwbHr...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>
+      when there is a valid user with this provider and uid and session return_to is nil
+        should redirect to "/"
+        should == #<User id: 58, email: "person55@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:13", updated_at: "2014-01-10 20:59:13", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$F5JsQztlxvtG1SzC1T.RmOxw.8HNpcgdX.C2hbfiUmzi...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>
+    when user already loged in
+      should redirect to "/"
+      assigned user
+        should have 1 item
+        name
+          should == "Foo"
+  .add_providers
+    should respond to #facebook
+
+User
+  .by_name
+    should == [#<User id: 62, email: "person59@example.com", name: "Foo Bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:13", updated_at: "2014-01-10 20:59:13", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$xQerQef6cb9S9tmMExOsUOZWK1jyBoC/eZeXmWEszXvn...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>]
+  .by_payer_email
+    should == [#<User id: 65, email: "person62@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:14", updated_at: "2014-01-10 20:59:14", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$pB0QRbMkuAxIKGIUrahfE.JEG8UloKSBdMb2Gzn1YBVZ...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>]
+  #backed_projects
+    should == [#<Project id: 28, name: "Foo bar", user_id: 68, category_id: 28, goal: #<BigDecimal:7fa6d978d408,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 20:59:14", updated_at: "2014-01-10 20:59:14", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_28", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  validations
+    should allow email to be set to "foo@bar.com"
+    should not allow email to be set to "foo"
+    should not allow bio to be set to "                                                                      a                                                                      "
+    should allow bio to be set to "                                                                     a                                                                     "
+    should allow bio to be set to "                                                                     a                                                                      "
+    should require case sensitive unique value for email
+    should not allow email to be set to "foo@bar"
+  .by_email
+    should == [#<User id: 77, email: "foo@bar.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:14", updated_at: "2014-01-10 20:59:14", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$/LfD.wzG2zDJ8nqDput.oOWRA4mJ5JASjjGqMzzwJxEW...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>]
+  .by_key
+    should == [#<User id: 80, email: "person75@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:14", updated_at: "2014-01-10 20:59:14", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$WhBZYb9nE0KSggWmcRRT8OBkrJTOKfeD8v0NjiFRk/Vc...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>]
+  #recommended_project
+    should == [#<Project id: 33, name: "Foo bar", user_id: 86, category_id: 33, goal: #<BigDecimal:7fa6e4903598,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 20:59:15", updated_at: "2014-01-10 20:59:15", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_33", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  .create_with_omniauth
+    email
+      should == "another_email@anotherdomain.com"
+    when user is not logged in and logs in with a facebook account with the same email
+      should == "foobar"
+      email
+        should == "another_email@anotherdomain.com"
+      id
+        should == 91
+    name
+      should == "Foo bar"
+    bio
+      should == "Foo bar's bio                                                                                                                               "
+    when user is merging facebook account
+      should == "foobar"
+      email
+        should == "test@test.com"
+    when user is from facebook
+      image_url
+        should == "https://graph.facebook.com/foobar/picture?type=large"
+    nickname
+      should == "foobar"
+    created user's authorizations
+      oauth_provider_id
+        should == 32
+      uid
+        should == "foobar"
+  #total_backed_projects
+    should == 2
+  .has_credits
+    when he has credits in the user_total
+      should == [#<User id: 104, email: "person87@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:19", updated_at: "2014-01-10 20:59:19", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$v0Xl0OsCq/jBDPVMoByx3.zehKO8EZ6cQOW032.f8//2...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>]
+  #updates_subscription
+    when user is unsubscribed from all projects
+      should == #<Unsubscribe id: 1, user_id: 107, notification_type_id: 3, project_id: nil, created_at: "2014-01-10 20:59:19", updated_at: "2014-01-10 20:59:19">
+    when user is subscribed to all projects
+      should be a new record
+  #project_unsubscribes
+    should == [#<Unsubscribe id: 2, user_id: 110, notification_type_id: 5, project_id: 38, created_at: "2014-01-10 20:59:19", updated_at: "2014-01-10 20:59:19">]
+  #facebook_id
+    when user do not have a FB authorization
+      should == nil
+    when user have a FB authorization
+      should == "bar"
+  associations
+    should have many authorizations
+    should have many projects
+    should have many notifications
+    should have one user_total
+    should have many unsubscribes
+    should have and belong to many channels
+    should have many oauth_providers through authorizations
+    should have many updates
+    should have many backs
+    should have and belong to many subscriptions
+  #update_attributes
+    when I try to update moip_login
+      should perform the update
+  .backer_totals
+    when we call upon user without backs
+      should == {:users=>0.0, :backers=>0.0, :backed=>0.0, :credits=>0.0}
+    when we call without scopes
+      should == {:users=>3.0, :backers=>3.0, :backed=>175.0, :credits=>25.0}
+    when we call with scopes
+      should == {:users=>1.0, :backers=>1.0, :backed=>25.0, :credits=>25.0}
+  #trustee?
+    when user is not a moderator of any channels
+      should return false
+    when user is a moderator of one or more channels
+      should return true
+  .by_id
+    should == [#<User id: 135, email: "person118@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:21", updated_at: "2014-01-10 20:59:21", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$N/oWZIzI.mSTBzUvuUD6fubsE2X9cWdKS9OjBNTX8Lys...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>]
+  #fix_facebook_link
+    when user provides valid url
+      should == "http://facebook.com/foo"
+    when user provides invalid url
+      should == "http://facebook.com/foo"
+  #credits
+    should == 50.0
+  .who_backed_project
+    should == [#<User id: 144, email: "person127@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 20:59:21", updated_at: "2014-01-10 20:59:21", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$ERXh6QEC0lXH4Or3G6uZYuCZ2S/80WZP.G5ksWVtg7w7...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>]
+  .create
+    facebook_link
+      should == "http://facebook.com/test"
+    twitter
+      should == "dbiazus"
+
+UserUploader
+  #thumb_avatar
+    should have an exact size of 119 by 121
+
+Notification
+  Associations
+    should belong to user
+    should belong to notification_type
+    should belong to project
+    should belong to project_update
+    should belong to backer
+  .create_notification_once
+    when I have not created the notification with the same type and filters
+      should call create_notification
+    when I have already created the notification with the same type but a partially different filter
+      should call create_notification
+    when I have already created the notification with the same type and filters
+      should never call create_notification
+  #send_email
+    when dismissed is false
+      should dismiss the notification
+      should send email
+    when dismissed is true
+      should not send email
+  .notify_backer
+    when NotificationType with the provided name exists
+      backer
+        should == #<Backer id: 60, project_id: 58, user_id: 168, reward_id: nil, value: #<BigDecimal:7fa6e6831f50,'0.1E2',9(45)>, confirmed_at: "2014-01-10 20:59:05", created_at: "2014-01-10 20:59:24", updated_at: "2014-01-10 20:59:24", anonymous: false, key: "32a4970dbfa5e7f42068ea3060e44df5", credits: false, notified_finish: false, payment_method: "MoIP", payment_token: nil, payment_id: nil, payer_name: nil, payer_email: nil, payer_document: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_zip_code: nil, address_city: nil, address_state: nil, address_phone_number: nil, payment_choice: nil, payment_service_fee: nil, state: "confirmed">
+      dismissed
+        should be true
+  .create_notification
+    when NotificationType with the provided name exists
+      should be persisted
+      class
+        should == Notification(id: integer, user_id: integer, project_id: integer, dismissed: boolean, created_at: datetime, updated_at: datetime, notification_type_id: integer, backer_id: integer, update_id: integer)
+    when NotificationType with the provided name does not exist
+      should be nil
+    when an update is provided
+      should be persisted
+      project_update
+        should == #<Update id: 2, user_id: 184, project_id: 66, title: "My title", comment: "This is a comment", comment_html: "<p>This is a comment</p>", created_at: "2014-01-10 20:59:25", updated_at: "2014-01-10 20:59:25", exclusive: false>
+
+UserTotal
+  put some tests here (PENDING: No reason given)
+
+base/index.html.slim
+  add some examples to (or delete) /Users/marnen/Documents/Passionate Produce/catarse_full/spec/views/channels/base/index.html.slim_spec.rb (PENDING: No reason given)
+
+ProjectsForHome
+  .recommends
+    should not include #<Project id: 71, name: "Foo bar", user_id: 189, category_id: 71, goal: #<BigDecimal:7fa6d8f89d10,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 20:59:26", updated_at: "2014-01-10 20:59:26", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_71", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+    should have 3 itens
+  .expiring
+    should not include #<Project id: 81, name: "Foo bar", user_id: 199, category_id: 81, goal: #<BigDecimal:7fa6e1ae9fe0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 20:59:27", updated_at: "2014-01-10 20:59:27", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_81", video_thumbnail: nil, state: "online", online_days: 50, online_date: "2014-01-08 20:59:27", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+    should have 3 itens
+  .recents
+    should not include #<Project id: 91, name: "Foo bar", user_id: 209, category_id: 91, goal: #<BigDecimal:7fa6d9766948,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 20:59:28", updated_at: "2014-01-10 20:59:28", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_91", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-04 20:59:28", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+    should have 3 itens
+  to_partial_path
+    should == "projects/project"
+
+Channels::Adm::Reports::SubscriberReportsController
+  GET index
+    should be successful
+
+UsersController
+  PUT update
+    should redirect to "/users/218-foo-bar#settings"
+    should update the user
+  PUT update_password
+    with right current password and right confirmation
+      should not be empty
+      should be nil
+      should redirect to "/users/226-foo-bar#settings"
+    with wrong current password
+      should redirect to "/users/228-foo-bar#settings"
+      should not be empty
+  GET set_email
+    should render template matcher "set_email"
+  GET show
+    should include 666
+  PUT update_email
+    when email is not valid
+      should render template matcher "set_email"
+    when email is valid and we have a session[:return_to]
+      should be nil
+      should redirect to "/foo"
+    when email is valid
+      should redirect to "/users/242-foo-bar#settings"
+      should update the user
+
+BackerObserver
+  after_create
+    payment_method
+      should == "MoIP"
+    key
+      should == "e74b1273f4fa2260ebe2dd32974e7592"
+  before_save
+    when payment_choice is updated to BoletoBancario
+      should notify the backer
+    when project is already successful
+      should not send project_successful notification again
+    when project reached the goal
+DEPRECATION: mock is deprecated. Use double instead. Called from /Users/marnen/Documents/Passionate Produce/catarse_full/spec/observers/backer_observer_spec.rb:39:in `block (4 levels) in <top (required)>'.
+      should notify the project owner
+    when is already confirmed
+      should not send confirm_backer notification again
+    when is not yet confirmed
+      notify project owner about this backer
+        should send project_owner_backer_confirmed notification
+        confirmed_at
+          should not be nil
+      notify the backer
+        should send confirm_backer notification
+        confirmed_at
+          should not be nil
+  .notify_backoffice_about_canceled
+    when backer change to confirmed
+      example at ./spec/observers/backer_observer_spec.rb:116
+    when backer is confirmed and change to canceled
+      example at ./spec/observers/backer_observer_spec.rb:108
+
+ProjectsController
+  PUT update
+    when user is a guest
+      it should behave like protected project
+        should == "Foo bar"
+    when user is a registered user
+      it should behave like protected project
+        should == "Foo bar"
+    when user is a project owner
+      when project is online
+        when I try to update only the about field
+          should update it
+        when I try to update the project name and the about field
+          should not update neither
+      when project is offline
+        it should behave like updatable project
+          should == "My Updated Title"
+    when user is an admin
+      it should behave like updatable project
+        should == "My Updated Title"
+  POST create
+    when user is logged in
+      should redirect to "/foo_page_116"
+    when no user is logged in
+      should redirect to "/sign_up"
+  GET embed_panel
+    status
+      should == 200
+  DELETE destroy
+    when user is a guest
+      should be true
+    when user is a registered user
+      should be true
+    when user is a project owner
+      should be true
+    when user is an admin
+      should be false
+  GET new
+    when user is a registered user
+      should be success
+    when user is a guest
+      should not be success
+  GET show
+    when we have update_id in the querystring
+      should assign update to @update
+  GET video
+    url is not a valid video
+      body
+        should == "null"
+    url is a valid video
+      body
+        should == "{\"options\":{\"User-Agent\":\"VideoInfo/1.4.0\"},\"url\":\"http://vimeo.com/17298435\",\"video_id\":\"17298435\",\"provider\":\"Vimeo\",\"embed_url\":\"http://player.vimeo.com/video/17298435\",\"title\":\"Cúpula nov/2010\",\"description\":\"IMagens do dia a dia na Cúpula, estudio e casa de Cisco Vasques em São PAulo. Neste video:<br />\\nGustavo MAchado & Lu, Camila Pitanga, Cisco VAsques, Tom GAstom, Gero Camilo, Tomás, Gisele SAnfelice, Alexandre BAndeira, Julia, Simone, Renato Ciasca, MAnjubinha e GErson\",\"keywords\":\"Gustavo MAcgado & Lu, Camila Pitanga, Cisco VAsques, Tom GAstom, Gero Camilo, Tomás, Gisele SAnfelice, Alexandre BAndeira, Julia, Simone, Renato Ciasca, MAnjubinha e GErson, Cúpula, Gustavo MAchado & Lu\",\"duration\":696,\"width\":1280,\"height\":720,\"date\":\"2010-11-29T18:23:27Z\",\"thumbnail_small\":\"http://b.vimeocdn.com/ts/107/328/107328495_100.jpg\",\"thumbnail_medium\":\"http://b.vimeocdn.com/ts/107/328/107328495_200.jpg\",\"thumbnail_large\":\"http://b.vimeocdn.com/ts/107/328/107328495_640.jpg\",\"view_count\":561}"
+  GET embed
+    status
+      should == 200
+  GET index
+    should be success
+
+Channel
+  Validations & Assoaciations
+    should have many subscriber_reports
+    should have and belong to many projects
+    should require description to be set
+    should require permalink to be set
+    validates uniqueness of permalink
+    should have and belong to many trustees
+    should have many channels_subscribers
+    should allow mass assignment of permalink
+    should require name to be set
+    should have and belong to many subscribers
+    should allow mass assignment of name
+    should allow mass assignment of description
+  #to_param
+    should return the permalink
+  #projects
+    should projects in more days online ascending order
+
+Adm::BackersController
+  PUT confirm
+    should be true
+  PUT cancel
+    should be true
+  PUT push_to_trash
+    should be true
+  PUT refund
+    should be true
+  PUT pendent
+    should be false
+  .menu
+    should add a menu entry to the menu_items class variable when we pass a parameter and retrieve when we have no parameters
+  PUT hide
+    should be true
+  GET index
+    when I'm logged as admin
+      status
+        should == 200
+    when I'm not logged in
+      should redirect to "/sign_up"
+
+UserDecorator
+  #display_name
+    when we only have a full name
+      should == "Full Name"
+    when we have a name and a full name
+      should == "name"
+    when we have only a name
+      should == "name"
+    when we have no name
+      should == "Sem nome"
+  #display_image_html
+    should == "<div class=\"avatar_wrapper\" style=\"width: 300px; height: 300px\"><img alt=\"User\" src=\"/assets/image.jpg\" style=\"width: 300px; height: auto\" /></div>"
+  #display_credits
+    display_credits
+      should == "R$ 0"
+  #short_name
+    short_name
+      should == "My Name Is Lorem ..."
+  #medium_name
+    medium_name
+      should == "My Name Is Lorem Ipsum Dolor Sit Amet A..."
+  #display_total_of_backs
+    with confirmed backs
+      display_total_of_backs
+        should == "R$ 500"
+  #display_image
+    when we have an uploaded image
+DEPRECATION: stub is deprecated. Use double instead. Called from /Users/marnen/Documents/Passionate Produce/catarse_full/spec/decorators/user_decorator_spec.rb:45:in `block (4 levels) in <top (required)>'.
+      should == "image.png"
+    when we have an image url
+      should == "image.png"
+    when we have an email
+      should == "https://gravatar.com/avatar/5e2a237dafbc45f79428fdda9c5024b1.jpg?default=/assets/user.png"
+
+Unsubscribe
+  .updates_unsubscribe
+    should not be persisted
+    class
+      should == Unsubscribe(id: integer, user_id: integer, notification_type_id: integer, project_id: integer, created_at: datetime, updated_at: datetime)
+    notification_type_id
+      should == 57
+    project_id
+      should == 1618
+    when project_id is nil
+      project_id
+        should be nil
+      class
+        should == Unsubscribe(id: integer, user_id: integer, notification_type_id: integer, project_id: integer, created_at: datetime, updated_at: datetime)
+  associations
+    should belong to user
+    should belong to notification_type
+    should belong to project
+
+Users::ProjectsController
+  GET index
+    status
+      should eq 200
+
+Users
+  the notification tab
+/Users/marnen/Documents/Passionate Produce/catarse_full/app/views/users/_project.html.slim:45 - spaces around attribute delimiters will be allowed in Slim 2.0. Your code is incompatible.
+    should show unsubscribe from backed projects
+    should show unsubscribe from all updates
+  redirect to the last page after login
+    should == "/foo_page_137"
+
+Projects::UpdatesController
+  GET index
+    status
+      should == 200
+  DELETE destroy
+    When user is a guest
+      status
+        should == 302
+    When user is admin
+      status
+        should == 200
+    When user is a registered user but don't the project owner
+      status
+        should == 302
+    When user is project_owner
+      status
+        should == 200
+  POST create
+    When user is a guest
+      should == 1
+    When user is admin
+      should == 2
+    When user is a registered user but don't the project owner
+      should == 1
+    When user is project_owner
+      should == 2
+
+SubscriberReport
+  Associations
+    should belong to channel
+  #id
+    should eq 23
+  .count
+    should eq 1
+  #name
+    should eq "Foo bar"
+  #channel_id
+    should eq 1
+  #email
+    should eq "person337@example.com"
+
+Ability
+  When user is admin
+    should be able to :access and :all
+  When is regular user
+    should not be able to :access and :all
+    should be able to :create and :projects
+    should not be able to :update and #<Project id: 1, name: "Foo bar", user_id: 4, category_id: 1, goal: #<BigDecimal:7fa6e49b09a0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:51", updated_at: "2014-01-10 21:00:51", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_147", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+    should not be able to :update and #<Reward id: 1, project_id: 2, minimum_value: #<BigDecimal:7fa6e4aaa3b0,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+  When user is project owner
+    should not be able to :access and :all
+    should be able to :create and :projects
+    should be able to :update and #<Project id: 3, name: "Foo bar", user_id: 10, category_id: 3, goal: #<BigDecimal:7fa6da181270,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_149", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+    should be able to :update and #<Reward id: 2, project_id: 4, minimum_value: #<BigDecimal:7fa6da39f8b8,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+    when project is approved
+      should be able to :update, #<Project id: 5, name: "Foo bar", user_id: 12, category_id: 5, goal: #<BigDecimal:7fa6e6822a50,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_151", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :uploaded_image
+      should be able to :update, #<Reward id: 3, project_id: 6, minimum_value: #<BigDecimal:7fa6e5944150,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :days_to_delivery
+      should not be able to :update, #<Project id: 7, name: "Foo bar", user_id: 14, category_id: 7, goal: #<BigDecimal:7fa6e587f0f8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_153", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :online_days
+      should be able to :update, #<Project id: 8, name: "Foo bar", user_id: 15, category_id: 8, goal: #<BigDecimal:7fa6e1d9d7a0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_154", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :about
+      should be able to :update, #<Project id: 9, name: "Foo bar", user_id: 16, category_id: 9, goal: #<BigDecimal:7fa6e6914df0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:52", updated_at: "2014-01-10 21:00:52", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_155", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :headline
+      should be able to :update, #<Reward id: 4, project_id: 10, minimum_value: #<BigDecimal:7fa6da36c580,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:53", updated_at: "2014-01-10 21:00:53", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :description
+      should be able to :destroy and #<Reward id: 5, project_id: 11, minimum_value: #<BigDecimal:7fa6dbc1a398,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:53", updated_at: "2014-01-10 21:00:53", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+      should be able to :update, #<Project id: 12, name: "Foo bar", user_id: 19, category_id: 12, goal: #<BigDecimal:7fa6e49d1fd8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:53", updated_at: "2014-01-10 21:00:53", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_158", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :video_url
+      should not be able to :update, #<Project id: 13, name: "Foo bar", user_id: 20, category_id: 13, goal: #<BigDecimal:7fa6e4a7bb28,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:53", updated_at: "2014-01-10 21:00:53", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_159", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :name
+      should be able to :update, #<Reward id: 6, project_id: 14, minimum_value: #<BigDecimal:7fa6e1d54910,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:53", updated_at: "2014-01-10 21:00:53", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :maximum_backers
+      should not be able to :update, #<Project id: 15, name: "Foo bar", user_id: 22, category_id: 15, goal: #<BigDecimal:7fa6e5a69a30,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:53", updated_at: "2014-01-10 21:00:53", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_161", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :goal
+      and someone make a back and select a reward
+        when backer is in time to confirm and not have confirmed backers
+          should not be able to :update, #<Reward id: 7, project_id: 16, minimum_value: #<BigDecimal:7fa6e4898180,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:53", updated_at: "2014-01-10 21:00:53", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :minimum_value
+          should be able to :update, #<Reward id: 8, project_id: 17, minimum_value: #<BigDecimal:7fa6dcfe9a18,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:54", updated_at: "2014-01-10 21:00:54", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :description
+          should not be able to :destroy and #<Reward id: 9, project_id: 18, minimum_value: #<BigDecimal:7fa6e4a31e38,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:54", updated_at: "2014-01-10 21:00:54", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+          should be able to :update, #<Reward id: 10, project_id: 19, minimum_value: #<BigDecimal:7fa6e1d04488,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:54", updated_at: "2014-01-10 21:00:54", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :days_to_delivery
+          should be able to :update, #<Reward id: 11, project_id: 20, minimum_value: #<BigDecimal:7fa6e693d430,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:54", updated_at: "2014-01-10 21:00:54", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :maximum_backers
+        when backer is not in time to confirm and have confirmed backers
+          should not be able to :update, #<Reward id: 12, project_id: 21, minimum_value: #<BigDecimal:7fa6da337e70,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:54", updated_at: "2014-01-10 21:00:54", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :minimum_value
+          should be able to :update, #<Reward id: 13, project_id: 22, minimum_value: #<BigDecimal:7fa6db481b68,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:54", updated_at: "2014-01-10 21:00:54", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :description
+          should not be able to :destroy and #<Reward id: 14, project_id: 23, minimum_value: #<BigDecimal:7fa6e6882c20,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:55", updated_at: "2014-01-10 21:00:55", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+          should be able to :update, #<Reward id: 15, project_id: 24, minimum_value: #<BigDecimal:7fa6e5884710,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:55", updated_at: "2014-01-10 21:00:55", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :days_to_delivery
+          should be able to :update, #<Reward id: 16, project_id: 25, minimum_value: #<BigDecimal:7fa6e59e1e78,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:55", updated_at: "2014-01-10 21:00:55", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :maximum_backers
+        when backer is not in time to confirm and not have confirmed backers
+          should be able to :update, #<Reward id: 17, project_id: 26, minimum_value: #<BigDecimal:7fa6dd5ebfb0,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:55", updated_at: "2014-01-10 21:00:55", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :minimum_value
+          should be able to :update, #<Reward id: 18, project_id: 27, minimum_value: #<BigDecimal:7fa6e49015b8,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:55", updated_at: "2014-01-10 21:00:55", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :description
+          should be able to :destroy and #<Reward id: 19, project_id: 28, minimum_value: #<BigDecimal:7fa6e1ccc830,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:55", updated_at: "2014-01-10 21:00:55", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+          should be able to :update, #<Reward id: 20, project_id: 29, minimum_value: #<BigDecimal:7fa6dcfd9e88,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :days_to_delivery
+          should be able to :update, #<Reward id: 21, project_id: 30, minimum_value: #<BigDecimal:7fa6e1de4060,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :maximum_backers
+    when project is failed
+      should be able to :update, #<Project id: 31, name: "Foo bar", user_id: 53, category_id: 31, goal: #<BigDecimal:7fa6e694cfe8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_177", video_thumbnail: nil, state: "failed", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :video_url
+      should be able to :update, #<Project id: 32, name: "Foo bar", user_id: 54, category_id: 32, goal: #<BigDecimal:7fa6c8837dd8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_178", video_thumbnail: nil, state: "failed", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :about
+      should be able to :update, #<Project id: 33, name: "Foo bar", user_id: 55, category_id: 33, goal: #<BigDecimal:7fa6e5872600,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_179", video_thumbnail: nil, state: "failed", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :uploaded_image
+      should not be able to :update, #<Reward id: 22, project_id: 34, minimum_value: #<BigDecimal:7fa6e1c69cf8,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :days_to_delivery
+      should be able to :update, #<Project id: 35, name: "Foo bar", user_id: 57, category_id: 35, goal: #<BigDecimal:7fa6e6863078,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_181", video_thumbnail: nil, state: "failed", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :headline
+    When project is waiting funds
+      should be able to :update, #<Project id: 36, name: "Foo bar", user_id: 58, category_id: 36, goal: #<BigDecimal:7fa6dd61b080,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_182", video_thumbnail: nil, state: "waiting_funds", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :video_url
+      should be able to :update, #<Project id: 37, name: "Foo bar", user_id: 59, category_id: 37, goal: #<BigDecimal:7fa6dbc33f78,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:56", updated_at: "2014-01-10 21:00:56", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_183", video_thumbnail: nil, state: "waiting_funds", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :about
+      should be able to :update, #<Project id: 38, name: "Foo bar", user_id: 60, category_id: 38, goal: #<BigDecimal:7fa6e59c0bd8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_184", video_thumbnail: nil, state: "waiting_funds", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :uploaded_image
+      should be able to :update, #<Reward id: 23, project_id: 39, minimum_value: #<BigDecimal:7fa6da16edc8,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :days_to_delivery
+      should be able to :update, #<Project id: 40, name: "Foo bar", user_id: 62, category_id: 40, goal: #<BigDecimal:7fa6dcf9e270,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_186", video_thumbnail: nil, state: "waiting_funds", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :headline
+    when project is successful
+      should be able to :update, #<Project id: 41, name: "Foo bar", user_id: 63, category_id: 41, goal: #<BigDecimal:7fa6e1c828e8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_187", video_thumbnail: nil, state: "successful", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :video_url
+      should be able to :update, #<Project id: 42, name: "Foo bar", user_id: 64, category_id: 42, goal: #<BigDecimal:7fa6e687b830,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_188", video_thumbnail: nil, state: "successful", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :about
+      should be able to :update, #<Project id: 43, name: "Foo bar", user_id: 65, category_id: 43, goal: #<BigDecimal:7fa6dd6311f0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_189", video_thumbnail: nil, state: "successful", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :uploaded_image
+      should not be able to :update, #<Reward id: 24, project_id: 44, minimum_value: #<BigDecimal:7fa6e1ca4fd8,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, and :days_to_delivery
+      should be able to :update, #<Project id: 45, name: "Foo bar", user_id: 67, category_id: 45, goal: #<BigDecimal:7fa6e5a029e8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:57", updated_at: "2014-01-10 21:00:57", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_191", video_thumbnail: nil, state: "successful", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">, and :headline
+  When is a guest
+    should not be able to :access and :all
+    should not be able to :create and :projects
+    should not be able to :update and #<Project id: 46, name: "Foo bar", user_id: 68, category_id: 46, goal: #<BigDecimal:7fa6dcfa7730,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:00:58", updated_at: "2014-01-10 21:00:58", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_192", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+    should not be able to :update and #<Reward id: 25, project_id: 47, minimum_value: #<BigDecimal:7fa6dbc63700,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:00:58", updated_at: "2014-01-10 21:00:58", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+
+BackerReport
+  add some examples to (or delete) /Users/marnen/Documents/Passionate Produce/catarse_full/spec/models/backer_report_spec.rb (PENDING: No reason given)
+
+Backer
+  #update_current_billing_info
+    address_street
+      should eq "test stret"
+    address_state
+      should eq "test state"
+    address_number
+      should eq "123"
+    address_zip_code
+      should eq "test zipcode"
+    address_city
+      should eq "test city"
+    payer_document
+      should eq "test doc number"
+    address_neighbourhood
+      should eq "test area"
+    address_phone_number
+      should eq "test phone"
+  .not_deleted
+    should return only the backers that is not deleted
+  .in_time_to_confirm
+    when we have backers in waiting confirmation
+      should have 2 item
+  Validations
+    should require project to be set
+    should require value to be set
+    should require user to be set
+    should allow value to be set to 10
+    should not allow value to be set to 9.99
+    should allow value to be set to 20
+  #update_user_billing_info
+    should update user billing info attributes
+  .by_state
+    should return all confirmed backers
+    should return all waiting confirmation backers
+    should return all canceled backers
+  #value_must_be_at_least_rewards_value
+    when value is lower than reward minimum value
+      should not be valid
+    when value is equal than reward minimum value
+      should be valid
+    when value is greater than reward minimum value
+      should be valid
+  #project_should_be_online
+    when project is draft
+      should not be valid
+    when project is successful
+      should not be valid
+    when project is waiting_funds
+      should not be valid
+    when project is failed
+      should not be valid
+    when project is online
+      should be valid
+  #should_not_back_if_maximum_backers_been_reached
+    when backers count is lower than maximum_backers
+      should be valid
+    when pending backers count is equal than maximum_backers
+      should not be valid
+    when backers count is equal than maximum_backers
+      should not be valid
+  .between_values
+    should have 3 itens
+  #display_value
+    when the value does not have decimal places
+      should == "R$ 1"
+    when the value has decimal places
+      should == "R$ 100"
+  state_machine
+    initial state
+      should be pending
+    #cancel
+      should switch to canceled state
+    #pendent
+      when in confirmed state
+        should switch to pending state
+    #push_to_trash
+      switch to deleted state
+    #waiting
+      when in confirmed state
+        should not switch to waiting_confirmation state
+      when in peding state
+        should switch to waiting_confirmation state
+    #refund
+      when backer is confirmed
+        should switch to refunded state
+      when backer is requested refund
+        should switch to refunded state
+      when backer is pending
+        should not switch to refunded state
+    #confirm
+      should switch to confirmed state
+    #request_refund
+      when backer is confirmed
+        should switch to requested_refund state
+      when backer is not confirmed
+        should not switch to requested_refund state
+      when backer is credits
+        should not switch to requested_refund state
+      when backer value is above user credits
+        should not switch to requested_refund state
+  .pending_to_refund
+    when backer as requested refund
+      should have 1 item
+  .can_refund
+    should == [#<Backer id: 65, project_id: 115, user_id: 200, reward_id: nil, value: #<BigDecimal:7fa6e1e15520,'0.1E2',9(45)>, confirmed_at: "2014-01-10 20:59:05", created_at: "2014-01-10 21:01:07", updated_at: "2014-01-10 21:01:07", anonymous: false, key: "108d697182764a06994a1cbdb66a5c8d", credits: false, notified_finish: false, payment_method: "MoIP", payment_token: nil, payment_id: nil, payer_name: nil, payer_email: nil, payer_document: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_zip_code: nil, address_city: nil, address_state: nil, address_phone_number: nil, payment_choice: nil, payment_service_fee: nil, state: "confirmed">]
+  #reward_must_be_from_project
+    when reward is not from the same project
+      should not be valid
+    when reward is from the same project
+      should be valid
+  Associations
+    should have many payment_notifications
+    should belong to user
+    should belong to project
+    should belong to reward
+  #recommended_projects
+    should call user recommended projects and remove the project of the back
+  #credits
+    when backs are confirmed and not done with credits but project is successful
+      should == 0
+    when backs are done with credits
+      should == 0
+    when backs are confirmed and not done with credits
+      should == 10
+    when backs are not confirmed
+      should == 0
+  #can_refund?
+    when project is successful
+      should be false
+    when backer is not confirmed
+      should be false
+    when project is not finished
+      should be false
+    when it's a valid refund
+      should be true
+  .can_cancel
+    when backer is in time to wait the confirmation
+      should have 0 item
+    when backer is by bank transfer and is passed the confirmation time
+      should have 1 item
+    when we have backers that is passed the confirmation time
+      should have 1 itens
+
+Channels::BaseHelper
+  add some examples to (or delete) /Users/marnen/Documents/Passionate Produce/catarse_full/spec/helpers/channels/base_helper_spec.rb (PENDING: No reason given)
+
+Users::BackersController
+  POST request_refund
+    without user
+      should redirect to "/sign_up"
+      should not set requested_refund
+    when current_user have a unconfirmed backer
+      should redirect to "/users/255-foo-bar#credits"
+      should be false
+    when current_user have a confirmed backer
+      should redirect to "/users/267-foo-bar#credits"
+      should be true
+    when current_user is not owner of the backer
+      should redirect to "/"
+      should be false
+  GET index
+    status
+      should == 200
+
+StaticController
+  GET guidelines
+    should be success
+    body
+      should =~ /Conheça melhor o que é o Catarse./
+    body
+      should =~ /Como Funciona o Catarse/
+  GET sitemap
+    should be success
+  GET thank_you
+    without session
+      should raise ActiveRecord::RecordNotFound
+    with a session with backer
+      should redirect to "/projects/159/backers/124"
+
+Channels::ProfilesController
+  GET show
+    status
+      should == 200
+
+ProjectObserver
+  after_create
+    should create notification for project owner
+    should create notification for catarse admin
+  #notify_owner_that_project_is_successful
+    should create notification for project owner
+  before_save
+    when video_url changes
+      should call download_video_thumbnail and do not call create_notification
+    when project is approved
+      should call create_notification and do not call download_video_thumbnail
+  sync with mailchimp
+    when project is unsuccesful
+      subscribe project owner to failed projects mailchimp list
+    when project is successful
+      subscribe project owner to successful projects mailchimp list
+  notify_backers
+    when project is successful
+      should notify the project backers
+    when project is unsuccessful
+      should notify the project backers and owner
+    when project is unsuccessful with pending backers
+      should notify the project backers and owner
+  #notify_admin_that_project_reached_deadline
+    should create notification for admin
+  #notify_owner_that_project_is_waiting_funds
+    should notify the project owner
+  #notify_owner_that_project_is_rejected
+    should create notification for project owner
+
+PaymentNotification
+  #extra_data
+    should == {"test_hash"=>1}
+  Associations
+    should belong to backer
+
+RewardsController
+  When current_user is a guest
+    it should behave like GET rewards index
+      should be success
+    it should behave like PUT rewards update without permission
+      should == "Foo bar"
+    it should behave like POST rewards create without permission
+      should be empty
+    it should behave like DELETE rewards destroy without permission
+      should not be empty
+  when current_user is admin
+    it should behave like GET rewards index
+      should be success
+    it should behave like PUT rewards update
+      should == "Amenori ipsum"
+    it should behave like POST rewards create
+      should not be empty
+    it should behave like DELETE rewards destroy
+      should be empty
+  When current_user is a project owner
+    it should behave like GET rewards index
+      should be success
+    it should behave like PUT rewards update
+      should == "Amenori ipsum"
+    it should behave like POST rewards create
+      should not be empty
+    When reward already have backers
+      can update the description and maximum backers
+        should eq 99
+        should eq "lorem ipsum"
+      can't update the minimum value
+        should not eq 15.0
+    it should behave like DELETE rewards destroy
+      should be empty
+  When current_user is a registered user
+    it should behave like GET rewards index
+      should be success
+    it should behave like PUT rewards update without permission
+      should == "Foo bar"
+    it should behave like POST rewards create without permission
+      should be empty
+    it should behave like DELETE rewards destroy without permission
+      should not be empty
+
+Configuration
+  should be valid from factory
+  should require name to be set
+  #get
+    should get config
+    should return nil when not founf
+    should return array
+
+ProjectTotal
+  #pledged
+    should == 30
+  #total_backers
+    should == 3
+  #total_payment_service_fee
+    should == 3
+
+Project
+  by_permalink
+    when project is not deleted
+      should == [#<Project id: 198, name: "Foo bar", user_id: 371, category_id: 198, goal: #<BigDecimal:7fa6e584ac18,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:27", updated_at: "2014-01-10 21:01:27", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+    when project is deleted
+      should == []
+  #expires_at
+    when we have an online_date
+      should == Fri, 10 Jan 2014 23:59:59 UTC +00:00
+    when we do not have an online_date
+      should be nil
+  #new_project_received_notification_type
+    when project does belong to a channel
+      should == :project_received_channel
+    when project does not belong to any channel
+      should == :project_received
+  .by_state
+    get all projects that is online
+      should == [#<Project id: 203, name: "Foo bar", user_id: 380, category_id: 206, goal: #<BigDecimal:7fa6e1ebe300,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:28", updated_at: "2014-01-10 21:01:28", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_348", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+    get all projects that is failed
+      should == [#<Project id: 207, name: "Foo bar", user_id: 384, category_id: 210, goal: #<BigDecimal:7fa6e1c498e0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:28", updated_at: "2014-01-10 21:01:28", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_352", video_thumbnail: nil, state: "failed", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+    get all projects that is successful
+      should == [#<Project id: 211, name: "Foo bar", user_id: 388, category_id: 214, goal: #<BigDecimal:7fa6dd649200,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:31", updated_at: "2014-01-10 21:01:31", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_356", video_thumbnail: nil, state: "successful", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  #pending_backers_reached_the_goal?
+    when dont reached the goal with pending backers
+      should be false
+    when reached the goal with pending backers
+      should be true
+  #pledged
+    when project_total exists
+DEPRECATION: mock is deprecated. Use double instead. Called from /Users/marnen/Documents/Passionate Produce/catarse_full/spec/models/project_spec.rb:363:in `block (4 levels) in <top (required)>'.
+      should == 10.0
+    when project_total is nil
+      should == 0
+  #download_video_thumbnail
+    should open the video_url and store it in video_thumbnail
+  #expired?
+    when online_date is nil
+      should be false
+    when expires_at is in the future
+      should be false
+    when expires_at is in the past
+      should be true
+  .expired
+    should == [#<Project id: 215, name: "Foo bar", user_id: 398, category_id: 220, goal: #<BigDecimal:7fa6e5947328,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:32", updated_at: "2014-01-10 21:01:32", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_362", video_thumbnail: nil, state: "online", online_days: -1, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  .near_of
+    should have 3 itens
+  #new_draft_recipient
+    when project does belong to a channel
+      should == #<User id: 402, email: "person744@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 21:01:33", updated_at: "2014-01-10 21:01:33", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$BepGafmjqjVmdaK5Zkw0YOgT6fniKrNOlHEqOGD9y6lB...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>
+    when project does not belong to any channel
+      should == #<User id: 404, email: "admin_projects@foor.bar", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 21:01:33", updated_at: "2014-01-10 21:01:33", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$XuzlPVTlSndRyV2njyVU5uBjxsTaWQ6mAr0J2VosIga/...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>
+  .between_created_at
+    should == [#<Project id: 227, name: "Foo bar", user_id: 406, category_id: 233, goal: #<BigDecimal:7fa6e1d9d098,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2013-01-19 00:00:00", updated_at: "2014-01-10 21:01:33", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_375", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  #pg_search
+    when project is not found
+      should == []
+    when project exists
+      should == [[#<Project id: 231, name: "foo", user_id: 410, category_id: 237, goal: #<BigDecimal:7fa6dcf7d408,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:34", updated_at: "2014-01-10 21:01:34", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_379", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">], [#<Project id: 231, name: "foo", user_id: 410, category_id: 237, goal: #<BigDecimal:7fa6dcf7c620,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:34", updated_at: "2014-01-10 21:01:34", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_379", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]]
+  validations
+    should ensure headline has a length of at most 140
+    should allow video_url to be set to "https://vimeo.com/12111"
+    should require category to be set
+    should require headline to be set
+    should require permalink to be set
+    should not allow video_url to be set to "http://www.foo.bar"
+    should allow video_url to be set to "http://vimeo.com/12111"
+    should require goal to be set
+    should require name to be set
+    should not allow permalink to be set to "users"
+    should allow permalink to be set to "testproject"
+    should require user to be set
+    should require about to be set
+  .not_expired
+    should == [#<Project id: 232, name: "Foo bar", user_id: 411, category_id: 238, goal: #<BigDecimal:7fa6e591f828,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:35", updated_at: "2014-01-10 21:01:35", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_380", video_thumbnail: nil, state: "online", online_days: 1, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  .backed_by
+    should == [#<Project id: 234, name: "Foo bar", user_id: 413, category_id: 240, goal: #<BigDecimal:7fa6e6906390,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:35", updated_at: "2014-01-10 21:01:35", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_382", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  .not_expiring
+    should == [#<Project id: 237, name: "Foo bar", user_id: 418, category_id: 243, goal: #<BigDecimal:7fa6dbc0d788,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:35", updated_at: "2014-01-10 21:01:35", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_385", video_thumbnail: nil, state: "online", online_days: 15, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  #selected_rewards
+    should == [#<Reward id: 47, project_id: 239, minimum_value: #<BigDecimal:7fa6e49633f8,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:01:36", updated_at: "2014-01-10 21:01:36", reindex_versions: nil, row_order: 0, days_to_delivery: 10>, #<Reward id: 48, project_id: 239, minimum_value: #<BigDecimal:7fa6e49627f0,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:01:36", updated_at: "2014-01-10 21:01:36", reindex_versions: nil, row_order: 4194304, days_to_delivery: 10>]
+  .by_progress
+    should have 2 itens
+  #time_to_go
+    when there is more than 1 day to go
+      should == {:time=>2, :unit=>"dias"}
+    when there is less than 1 day to go
+      should == {:time=>13, :unit=>"horas"}
+    when there is less than 1 hour to go
+      should == {:time=>59, :unit=>"minutos"}
+  .from_channels
+    should == [#<Project id: 243, name: "Foo bar", user_id: 433, category_id: 252, goal: #<BigDecimal:7fa6e5b903c8,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:36", updated_at: "2014-01-10 21:01:36", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_394", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  #can_go_to_second_chance?
+    when confirmed and pending backers reached less of 30% of the goal
+      should be false
+    when confirmed and pending backers reached 30% of the goal and in time to wait to wait
+      should be true
+  #reached_goal?
+    when sum of all backers don't hit the goal
+      should be false
+    when sum of all backers hit the goal
+      should be true
+  .recent
+    should == [#<Project id: 249, name: "Foo bar", user_id: 443, category_id: 258, goal: #<BigDecimal:7fa6e68f65d0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:38", updated_at: "2014-01-10 21:01:38", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_400", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-06 21:01:38", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  .to_finish
+    should call scope expired and filter states that can be finished
+  .finish_projects!
+    should iterate through to_finish projects and call finish to each one
+  .not_deleted_projects
+    should have 2 itens
+  state machine
+    #draft?
+      when project is new
+        should be true
+    #approve
+      should persist the date of approvation
+      should call after transition method to notify the project owner
+      online?
+        should be true
+    .push_to_draft
+      draft?
+        should be true
+    #reject
+      rejected?
+        should be true
+    #push_to_trash
+      permalink
+        should == "deleted_project_260"
+      deleted?
+        should be true
+    #finish
+      when project is not approved
+        finish
+          should be false
+      when project is expired and the sum of the pending backers and confirmed backers dont reached the goal
+        failed?
+          should be true
+      when project already hit the goal and still is in the waiting_funds time
+        successful?
+          should be false
+      when project is expired and have recent backers without confirmation
+        waiting_funds?
+          should be true
+      when project already hit the goal and passed the waiting_funds time
+        successful?
+          should be true
+      when project not hit the goal
+        should generate credits for users
+        failed?
+          should be true
+      when project is expired and the sum of the pending backers and confirmed backers reached 30% of the goal
+        waiting_funds?
+          should be true
+    #rejected?
+      when project is not accepted
+        should be true
+    #online?
+      should be true
+  #total_payment_service_fee
+    when project_total exists
+DEPRECATION: mock is deprecated. Use double instead. Called from /Users/marnen/Documents/Passionate Produce/catarse_full/spec/models/project_spec.rb:381:in `block (4 levels) in <top (required)>'.
+      should == 4.0
+    when project_total is nil
+      should == 0
+  #progress
+    when goal == pledged > 0
+      should == 100
+    when goal is 0.0 and pledged > 0.0
+      should == 100
+    when goal is > 0 and pledged is 0.0
+      should == 0
+    when goal is 0.0 and pledged is 0.0
+      should == 0
+  .between_expires_at
+    should == [#<Project id: 272, name: "Foo bar", user_id: 479, category_id: 287, goal: #<BigDecimal:7fa6e687b268,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:42", updated_at: "2014-01-10 21:01:42", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_427", video_thumbnail: nil, state: "online", online_days: 0, online_date: "2013-01-19 00:00:00", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  #video
+    video_url is blank
+      video
+        should be nil
+    video_url is defined
+      caches the response object
+      video_url is an YouTube url
+        video
+          should be an instance of VideoInfo::Providers::Youtube
+      video_url is a Vimeo url
+        video
+          should be an instance of VideoInfo::Providers::Vimeo
+    video_url changes
+      maintain cached version
+  #total_backers
+    when project_total exists
+DEPRECATION: mock is deprecated. Use double instead. Called from /Users/marnen/Documents/Passionate Produce/catarse_full/spec/models/project_spec.rb:400:in `block (4 levels) in <top (required)>'.
+      should == 1
+    when project_total is nil
+      should == 0
+  .online
+    should == [#<Project id: 275, name: "Foo bar", user_id: 489, category_id: 297, goal: #<BigDecimal:7fa6e1c40ab0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:44", updated_at: "2014-01-10 21:01:44", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_437", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  #permalink_on_routes?
+    should not allow a permalink to be one of catarse's routes
+    should allow a unique permalink
+  associations
+    should belong to user
+    should have many updates
+    should belong to category
+    should have one project_total
+    should have many rewards
+    should have and belong to many channels
+    should have many backers
+    should have many notifications
+  .state_names
+    should == [:draft, :rejected, :online, :successful, :waiting_funds, :failed]
+  .expiring
+    should == [#<Project id: 277, name: "Foo bar", user_id: 491, category_id: 299, goal: #<BigDecimal:7fa6e48c2c50,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:01:44", updated_at: "2014-01-10 21:01:44", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_439", video_thumbnail: nil, state: "online", online_days: 13, online_date: "2014-01-10 21:01:44", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">]
+  #in_time_to_wait?
+    when project expiration time is not more on time to wait
+      should be false
+    when project expiration is in time to wait
+      should be true
+  #new_draft_project_notification_type
+    when project does belong to a channel
+      should == :new_draft_project_channel
+    when project does not belong to any channel
+      should == :new_draft_project
+  #in_time?
+    when expires_at is in the past
+      should be false
+    when expires_at is in the future
+      should be true
+
+Blog
+  .fetch_last_posts
+    should fetch last posts from the blog url in configuration
+
+UserObserver
+  before_save
+    twitter
+      should == "should_be_change"
+  after_create
+    send new user registration notification
+
+Adm::UsersController
+  GET index
+    when I'm logged as admin
+      status
+        should == 200
+    when I'm not logged in
+      should redirect to "/sign_up"
+
+Projects
+  home
+    should show recent projects
+  search
+    should show recommended projects
+  explore
+    should show recommended projects
+  edit
+    edit tab should be present
+  new and create
+    should present the form and save the data (FAILED - 1)
+
+ProjectUploader
+  #project_thumb
+    should have an exact size of 220 by 172
+  #project_thumb
+    should have an exact size of 512 by 400
+  #project_thumb
+    should have an exact size of 85 by 67
+  #store_dir
+    should == "uploads/project/uploaded_image/4"
+
+find_secure_token
+  should have been configured in initializer
+  when database does not contain secret_token in configurations
+    should == "6004aefce8ef554a076421467ebc66dab922ec8146022620d50c30fab47df3d041ec82d171c0b967367e93b3c192fa1da12a2ce5ab0637d0748fb4194865b484"
+    should not be nil
+
+Category
+  Associations
+    should have many projects
+    should require name_pt to be set
+    should require case sensitive unique value for name_pt
+
+NotificationObserver
+  after_create
+    When email, subject and text are filled should delivery an email to user
+
+Reward
+  should have a minimum value
+  should have a description
+  should have a greater than 10.00 minimum value
+  should have maximum backers > 0
+  should have integer maximum backers
+  should have a HTML-safe name that is a HTML composition from minimum_value, description and sold_out
+  Versioning
+    after update reward
+      should have 2 itens
+      should == "<p>envie um email para <a href=\"mailto:foo@bar.com\" target=\"_blank\">foo@bar.com</a></p>"
+      #has_modification?
+    when reward is recent
+      #has_modification?
+      should have 1 item
+  #display_description
+    should == "<p>envie um email para <a href=\"mailto:foo@bar.com\" target=\"_blank\">foo@bar.com</a></p>"
+  Associations
+    should have many backers
+    should belong to project
+  #sold_out?
+    when reward have limit
+      and have confirmed backers and backers in time to confirm
+        should == 1
+        should be false
+      and reached the maximum backers number with confirmed backers
+        should == 0
+        should be true
+      and have confirmed backers and the in time to confirm already expired
+        should == 2
+        should be false
+      and reached the maximum backers number with backers in time to confirm
+        should == 0
+        should be true
+    when reward not have limits
+      should be false
+  #display_minimum
+    should == "R$ 10"
+
+UnsubscribesController
+  POST create
+    when we do not have such unsubscribe
+      should create an unsubscribe
+    when we already have such unsubscribe
+      should destroy the unsubscribe
+
+NotificationsMailer
+  should satisfy expectations
+
+UpdateObserver
+  after_create
+    call notify update worker
+      should send to queue
+
+ChannelsSubscriber
+  validations
+    should require channel_id to be set
+    should require user_id to be set
+  associations
+    should belong to channel
+    should belong to user
+
+ProjectDecorator
+  #display_expires_at
+    when we have an online_date
+      should call I18n with date
+    when online_date is nil
+      should == ""
+  #display_image
+    when we have a video_url without thumbnail
+      should == "http://b.vimeocdn.com/ts/107/328/107328495_640.jpg"
+    when we have a video_thumbnail
+      should == "/uploads/project/video_thumbnail/38/project_thumb_image.png"
+    when we have an uploaded_image
+      should == "/uploads/project/uploaded_image/39/project_thumb_image.png"
+  #display_video_embed_url
+    source does not have a video
+      should be nil
+    source has a Vimeo video
+      should == "http://player.vimeo.com/video/17298435?title=0&byline=0&portrait=0&autoplay=0"
+  #display_progress
+    when progress is 0
+      should == 0
+    when progress is between 8 and 100
+      should == 70
+    when progress is between 0 and 8
+      should == 8
+    when progress is above 100
+      should == 100
+  #display_status
+    when online and reached goal
+      should == "reached_goal"
+    when failed
+      should == "failed"
+    when online and have not reached goal yet
+      should == "not_reached_goal"
+    when waiting funds
+      should == "waiting_funds"
+    when successful
+      should == "successful"
+  #successful_flag
+    When the project was not successful
+      should not return an image, but nil
+    When the project is successful
+      should return a successful image flag when the project is successful
+  #about_html
+    should == "<p>Foo Bar <a href=\"http://www.foo.bar\" target=\"_blank\">http://www.foo.bar</a> &lt;javascript&gt;xss()&lt;/javascript&gt;<a target=\"_blank\" href=\"http://click.here\">Click here</a></p>"
+
+OauthProvider
+  Associations
+    should have many authorizations
+
+Authorization
+  should belong to oauth_provider
+  should belong to user
+
+Ability
+  .trustee
+    When the user is a trustee
+      should be able to :access and :all
+      should be able to :update and #<Project id: 55, name: "Foo bar", user_id: 83, category_id: 58, goal: #<BigDecimal:7fa6e592d9a0,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:02:28", updated_at: "2014-01-10 21:02:28", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_507", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+      should not be able to :update and #<Reward id: 17, project_id: 57, minimum_value: #<BigDecimal:7fa6e1da73b8,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:02:28", updated_at: "2014-01-10 21:02:28", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+      should be able to :update and #<User id: 87, email: "person939@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 21:02:28", updated_at: "2014-01-10 21:02:28", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$Q6nqtdRHSeGMwGPsbKQ3GeZUdhFvWpVzNNJdhAVxCiDV...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>
+      should not be able to :update and #<Project id: 60, name: "Foo bar", user_id: 91, category_id: 63, goal: #<BigDecimal:7fa6db461b10,'0.1E5',9(36)>, about: "Foo bar", headline: "Foo bar", video_url: "http://vimeo.com/17298435", short_url: nil, created_at: "2014-01-10 21:02:29", updated_at: "2014-01-10 21:02:29", about_html: "<p>Foo bar</p>", recommended: false, home_page_comment: nil, permalink: "foo_page_512", video_thumbnail: nil, state: "online", online_days: 5, online_date: "2014-01-10 20:59:05", how_know: "Lorem ipsum", more_links: "Ipsum dolor", first_backers: "Foo bar", uploaded_image: nil, video_embed_url: "http://player.vimeo.com/video/17298435">
+      should not be able to :update and #<User id: 94, email: "person946@example.com", name: "Foo bar", nickname: nil, bio: "This is Foo bar's biography.", image_url: nil, newsletter: false, project_updates: false, created_at: "2014-01-10 21:02:29", updated_at: "2014-01-10 21:02:29", admin: false, full_name: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_city: nil, address_state: nil, address_zip_code: nil, phone_number: nil, locale: "pt", cpf: nil, encrypted_password: "$2a$04$Ejp/Pplr4xsqydMAngRRIOLQ0..tJV/oyXLvmexpQTwK...", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, twitter: nil, facebook_link: nil, other_link: nil, uploaded_image: nil, moip_login: nil, state_inscription: nil>
+      should be able to :update and #<Reward id: 18, project_id: 62, minimum_value: #<BigDecimal:7fa6e587d6e0,'0.1E2',9(45)>, maximum_backers: nil, description: "Foo bar", created_at: "2014-01-10 21:02:29", updated_at: "2014-01-10 21:02:29", reindex_versions: nil, row_order: 0, days_to_delivery: 10>
+
+ImageUploader
+  #extension_white_list
+    when it's mounted as :video_thumbnail
+      should be nil
+    when it's mounted as anything but :video_thumbnail
+      should == ["jpg", "jpeg", "gif", "png"]
+  #cache_dir
+    should == "/Users/marnen/Documents/Passionate Produce/catarse_full/spec/dummy/tmp/uploads"
+  .choose_storage
+    when in production env
+      should == :fog
+    when not in production env
+      should == :file
+  #store_dir
+    should == "uploads/project/uploaded_image/68"
+
+PaymentEngines
+  .register
+    should == [{:name=>"test", :review_path=>#<Proc:0x007fa6e1cbe6b8@/Users/marnen/Documents/Passionate Produce/catarse_full/spec/lib/payment_engines_spec.rb:6 (lambda)>, :locale=>"en"}]
+  .configuration
+    should == Configuration(id: integer, name: text, value: text, created_at: datetime, updated_at: datetime)
+  .clear
+    should be empty
+  .find_payment
+    should == #<Backer id: 23, project_id: 69, user_id: 104, reward_id: nil, value: #<BigDecimal:7fa6e59672e0,'0.1E2',9(45)>, confirmed_at: "2014-01-10 20:59:05", created_at: "2014-01-10 21:02:32", updated_at: "2014-01-10 21:02:33", anonymous: false, key: "2af178110acc615c8b3b22b902737644", credits: false, notified_finish: false, payment_method: "MoIP", payment_token: nil, payment_id: nil, payer_name: nil, payer_email: nil, payer_document: nil, address_street: nil, address_number: nil, address_complement: nil, address_neighbourhood: nil, address_zip_code: nil, address_city: nil, address_state: nil, address_phone_number: nil, payment_choice: nil, payment_service_fee: nil, state: "confirmed">
+  .create_payment_notification
+    should == #<PaymentNotification id: 1, backer_id: 24, extra_data: {"test"=>true}, created_at: "2014-01-10 21:02:33", updated_at: "2014-01-10 21:02:33">
+  .engines
+    when locale is en
+      should == [{:name=>"test", :review_path=>#<Proc:0x007fa6e5a11448@/Users/marnen/Documents/Passionate Produce/catarse_full/spec/lib/payment_engines_spec.rb:6 (lambda)>, :locale=>"en"}, {:name=>"test pt", :review_path=>#<Proc:0x007fa6e5a11380@/Users/marnen/Documents/Passionate Produce/catarse_full/spec/lib/payment_engines_spec.rb:7 (lambda)>, :locale=>"pt"}]
+    when locale is pt
+      should == [{:name=>"test pt", :review_path=>#<Proc:0x007fa6e68e8778@/Users/marnen/Documents/Passionate Produce/catarse_full/spec/lib/payment_engines_spec.rb:7 (lambda)>, :locale=>"pt"}, {:name=>"test", :review_path=>#<Proc:0x007fa6e68e8840@/Users/marnen/Documents/Passionate Produce/catarse_full/spec/lib/payment_engines_spec.rb:6 (lambda)>, :locale=>"en"}]
+
+Projects::BackersController
+  POST update_info
+    when no user is logged in
+      should redirect to "/sign_up"
+    when we have the right user
+      body
+        should == "{\"message\":\"updated\"}"
+    when backer don't exist in current_user
+      should set flash failure
+      should redirect to "/"
+    when try pass unpermitted attributes
+      should be redirect
+  POST create
+    when no user is logged
+      should set the session[:return_to]
+      should redirect to "/sign_up"
+    without value
+      should redirect to "/projects/78/backers/new"
+    when user is logged in
+      body
+        should =~ /Preencha e revise os dados para pagamento/
+      body
+        should =~ /Foo bar/
+      body
+        should =~ /R\$ 20/
+    with invalid backer values
+      should redirect to "/projects/82/backers/new"
+  PUT credits_checkout
+    without user
+      should redirect to "/sign_up"
+    with correct user but insufficient credits
+      should not confirm backer
+      should set flash failure
+      should redirect to "/projects/86/backers/new"
+    when backer don't exist in current_user
+      should set flash failure
+      should redirect to "/"
+    with correct user and sufficient credits
+      should confirm backer
+      should set flash success
+      should redirect to "/projects/93/backers/44"
+  GET show
+    when no user is logged in
+      should redirect to "/sign_up"
+    when user logged in is different from backer
+      should set flash failure
+      should redirect to "/"
+    when backer is logged in
+      should be successful
+      body
+        should =~ /Muito obrigado/
+  GET new
+    when no user is logged
+      should redirect to "/sign_up"
+    when project.online? is true and we have configured a secure create url
+      should assign the https url to @create_url
+    when user is logged in but project.online? is false
+      should redirect to "/"
+    when project.online? is true and we have not configured a secure create url
+      should assign review_project_backers_path to @create_url
+      should render template matcher "projects/backers/new"
+      body
+        should =~ /Oohh yeah!/
+      body
+        should =~ /Obrigado. Eu só quero ajudar o projeto./
+      body
+        should =~ /Revisar e realizar pagamento/
+      body
+        should =~ /Foo bar/
+  GET index
+    status
+      should eq 200
+
+Update
+  validations
+    should require project_id to be set
+    should require comment to be set
+    should require user_id to be set
+    should require comment_html to be set
+  .visible_to
+    when user is a backer
+      should have 2 itens
+    when user is a project owner
+      should have 2 itens
+    when user is not a backer
+      should eq [#<Update id: 7, user_id: 194, project_id: 112, title: "My title", comment: "This is a comment", comment_html: "<p>This is a comment</p>", created_at: "2014-01-10 21:02:45", updated_at: "2014-01-10 21:02:45", exclusive: false>]
+    when user is a guest
+      should eq [#<Update id: 9, user_id: 198, project_id: 113, title: "My title", comment: "This is a comment", comment_html: "<p>This is a comment</p>", created_at: "2014-01-10 21:02:45", updated_at: "2014-01-10 21:02:45", exclusive: false>]
+    when user is an admin
+      should have 2 itens
+  associations
+    should belong to project
+    should belong to user
+  #email_comment_html
+    should == "<p>this is a comment<br />\n<a href=\"http://vimeo.com/6944344\" target=\"_blank\">http://vimeo.com/6944344</a><br />\n<img src=\"http://catarse.me/assets/catarse/logo164x54.png\" alt=\"\" style=\"max-width:513px\" /></p>"
+  .create
+    comment_html
+      should == "<p>this is a comment</p>"
+  #notify_backers
+    should call Notification.create_notification once
+
+Pending:
+  UserTotal put some tests here
+    # No reason given
+    # ./spec/models/user_total_spec.rb:4
+  base/index.html.slim add some examples to (or delete) /Users/marnen/Documents/Passionate Produce/catarse_full/spec/views/channels/base/index.html.slim_spec.rb
+    # No reason given
+    # ./spec/views/channels/base/index.html.slim_spec.rb:4
+  BackerReport add some examples to (or delete) /Users/marnen/Documents/Passionate Produce/catarse_full/spec/models/backer_report_spec.rb
+    # No reason given
+    # ./spec/models/backer_report_spec.rb:4
+  Channels::BaseHelper add some examples to (or delete) /Users/marnen/Documents/Passionate Produce/catarse_full/spec/helpers/channels/base_helper_spec.rb
+    # No reason given
+    # ./spec/helpers/channels/base_helper_spec.rb:14
+
+Failures:
+
+  1) Projects new and create should present the form and save the data
+     Failure/Error: Unable to find matching line from backtrace
+     ActiveRecord::RecordNotFound:
+       ActiveRecord::RecordNotFound
+     # ./app/controllers/projects_controller.rb:82:in `resource'
+     # ./app/controllers/projects_controller.rb:56:in `show'
+
+Finished in 3 minutes 39.7 seconds
+651 examples, 1 failure, 4 pending
+
+Failed examples:
+
+rspec ./spec/features/projects_spec.rb:65 # Projects new and create should present the form and save the data
+
+Randomized with seed 6523
+
+[Coveralls] Outside the Travis environment, not sending data.
