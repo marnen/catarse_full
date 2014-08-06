@@ -9,15 +9,17 @@ Gem::Specification.new do |s|
   s.version     = CatarseFull::VERSION
   s.authors     = ["Marnen Laibow-Koser"]
   s.email       = ["marnen@marnen.org"]
-  s.homepage    = "TODO"
+  s.homepage    = "https://github.com/marnen/catarse_full"
 
-  s.summary     = "TODO: Summary of CatarseFull."
-  s.description = "TODO: Description of CatarseFull."
+  s.summary     = "Gem packaging of Catarse."
+  s.description = "Gem packaging of Catarse, a crowdfunding application."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"]
 
-  [
+  dependencies = {}
+
+  dependencies[:runtime] = [
     # We got some weird bug concerning encoding of AR objects in rails 3.2.13+
     ['rails', '3.2.13'],
     ['mail', '2.5.3'],
