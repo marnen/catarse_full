@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -244,7 +245,33 @@ CREATE TABLE users (
 --
 
 CREATE VIEW backer_reports AS
-    SELECT b.project_id, u.name, b.value, r.minimum_value, r.description, b.payment_method, b.payment_choice, b.payment_service_fee, b.key, (b.created_at)::date AS created_at, (b.confirmed_at)::date AS confirmed_at, u.email, b.payer_email, b.payer_name, COALESCE(b.payer_document, u.cpf) AS cpf, u.address_street, u.address_complement, u.address_number, u.address_neighbourhood, u.address_city, u.address_state, u.address_zip_code, b.state FROM ((backers b JOIN users u ON ((u.id = b.user_id))) LEFT JOIN rewards r ON ((r.id = b.reward_id))) WHERE ((b.state)::text = ANY (ARRAY[('confirmed'::character varying)::text, ('refunded'::character varying)::text, ('requested_refund'::character varying)::text]));
+ SELECT b.project_id,
+    u.name,
+    b.value,
+    r.minimum_value,
+    r.description,
+    b.payment_method,
+    b.payment_choice,
+    b.payment_service_fee,
+    b.key,
+    (b.created_at)::date AS created_at,
+    (b.confirmed_at)::date AS confirmed_at,
+    u.email,
+    b.payer_email,
+    b.payer_name,
+    COALESCE(b.payer_document, u.cpf) AS cpf,
+    u.address_street,
+    u.address_complement,
+    u.address_number,
+    u.address_neighbourhood,
+    u.address_city,
+    u.address_state,
+    u.address_zip_code,
+    b.state
+   FROM ((backers b
+   JOIN users u ON ((u.id = b.user_id)))
+   LEFT JOIN rewards r ON ((r.id = b.reward_id)))
+  WHERE ((b.state)::text = ANY ((ARRAY['confirmed'::character varying, 'refunded'::character varying, 'requested_refund'::character varying])::text[]));
 
 
 --
@@ -266,7 +293,30 @@ CREATE TABLE configurations (
 --
 
 CREATE VIEW backer_reports_for_project_owners AS
-    SELECT b.project_id, COALESCE(r.id, 0) AS reward_id, r.description AS reward_description, (b.confirmed_at)::date AS confirmed_at, b.value AS back_value, (b.value * (SELECT (configurations.value)::numeric AS value FROM configurations WHERE (configurations.name = 'catarse_fee'::text))) AS service_fee, u.email AS user_email, u.name AS user_name, b.payer_email, b.payment_method, COALESCE(b.address_street, u.address_street) AS street, COALESCE(b.address_complement, u.address_complement) AS complement, COALESCE(b.address_number, u.address_number) AS address_number, COALESCE(b.address_neighbourhood, u.address_neighbourhood) AS neighbourhood, COALESCE(b.address_city, u.address_city) AS city, COALESCE(b.address_state, u.address_state) AS state, COALESCE(b.address_zip_code, u.address_zip_code) AS zip_code, b.anonymous FROM ((backers b JOIN users u ON ((u.id = b.user_id))) LEFT JOIN rewards r ON ((r.id = b.reward_id))) WHERE ((b.state)::text = 'confirmed'::text);
+ SELECT b.project_id,
+    COALESCE(r.id, 0) AS reward_id,
+    r.description AS reward_description,
+    (b.confirmed_at)::date AS confirmed_at,
+    b.value AS back_value,
+    (b.value * ( SELECT (configurations.value)::numeric AS value
+           FROM configurations
+          WHERE (configurations.name = 'catarse_fee'::text))) AS service_fee,
+    u.email AS user_email,
+    u.name AS user_name,
+    b.payer_email,
+    b.payment_method,
+    COALESCE(b.address_street, u.address_street) AS street,
+    COALESCE(b.address_complement, u.address_complement) AS complement,
+    COALESCE(b.address_number, u.address_number) AS address_number,
+    COALESCE(b.address_neighbourhood, u.address_neighbourhood) AS neighbourhood,
+    COALESCE(b.address_city, u.address_city) AS city,
+    COALESCE(b.address_state, u.address_state) AS state,
+    COALESCE(b.address_zip_code, u.address_zip_code) AS zip_code,
+    b.anonymous
+   FROM ((backers b
+   JOIN users u ON ((u.id = b.user_id)))
+   LEFT JOIN rewards r ON ((r.id = b.reward_id)))
+  WHERE ((b.state)::text = 'confirmed'::text);
 
 
 --
@@ -274,7 +324,49 @@ CREATE VIEW backer_reports_for_project_owners AS
 --
 
 CREATE VIEW backers_by_periods AS
-    WITH weeks AS (SELECT (generate_series.generate_series * 7) AS days FROM generate_series(0, 7) generate_series(generate_series)), current_period AS (SELECT 'current_period'::text AS series, sum(b.value) AS sum, (w.days / 7) AS week FROM (backers b RIGHT JOIN weeks w ON ((((b.confirmed_at)::date >= ((('now'::text)::date - w.days) - 7)) AND (b.confirmed_at < (('now'::text)::date - w.days))))) WHERE ((b.state)::text <> ALL (ARRAY[('pending'::character varying)::text, ('canceled'::character varying)::text, ('waiting_confirmation'::character varying)::text, ('deleted'::character varying)::text])) GROUP BY (w.days / 7)), previous_period AS (SELECT 'previous_period'::text AS series, sum(b.value) AS sum, (w.days / 7) AS week FROM (backers b RIGHT JOIN weeks w ON ((((b.confirmed_at)::date >= (((('now'::text)::date - w.days) - 7) - 56)) AND (b.confirmed_at < ((('now'::text)::date - w.days) - 56))))) WHERE ((b.state)::text <> ALL (ARRAY[('pending'::character varying)::text, ('canceled'::character varying)::text, ('waiting_confirmation'::character varying)::text, ('deleted'::character varying)::text])) GROUP BY (w.days / 7)), last_year AS (SELECT 'last_year'::text AS series, sum(b.value) AS sum, (w.days / 7) AS week FROM (backers b RIGHT JOIN weeks w ON ((((b.confirmed_at)::date >= (((('now'::text)::date - w.days) - 7) - 365)) AND (b.confirmed_at < ((('now'::text)::date - w.days) - 365))))) WHERE ((b.state)::text <> ALL (ARRAY[('pending'::character varying)::text, ('canceled'::character varying)::text, ('waiting_confirmation'::character varying)::text, ('deleted'::character varying)::text])) GROUP BY (w.days / 7)) (SELECT current_period.series, current_period.sum, current_period.week FROM current_period UNION ALL SELECT previous_period.series, previous_period.sum, previous_period.week FROM previous_period) UNION ALL SELECT last_year.series, last_year.sum, last_year.week FROM last_year ORDER BY 1, 3;
+ WITH weeks AS (
+         SELECT (generate_series.generate_series * 7) AS days
+           FROM generate_series(0, 7) generate_series(generate_series)
+        ), current_period AS (
+         SELECT 'current_period'::text AS series,
+            sum(b.value) AS sum,
+            (w.days / 7) AS week
+           FROM (backers b
+      RIGHT JOIN weeks w ON ((((b.confirmed_at)::date >= ((('now'::text)::date - w.days) - 7)) AND (b.confirmed_at < (('now'::text)::date - w.days)))))
+     WHERE ((b.state)::text <> ALL ((ARRAY['pending'::character varying, 'canceled'::character varying, 'waiting_confirmation'::character varying, 'deleted'::character varying])::text[]))
+     GROUP BY (w.days / 7)
+        ), previous_period AS (
+         SELECT 'previous_period'::text AS series,
+            sum(b.value) AS sum,
+            (w.days / 7) AS week
+           FROM (backers b
+      RIGHT JOIN weeks w ON ((((b.confirmed_at)::date >= (((('now'::text)::date - w.days) - 7) - 56)) AND (b.confirmed_at < ((('now'::text)::date - w.days) - 56)))))
+     WHERE ((b.state)::text <> ALL ((ARRAY['pending'::character varying, 'canceled'::character varying, 'waiting_confirmation'::character varying, 'deleted'::character varying])::text[]))
+     GROUP BY (w.days / 7)
+        ), last_year AS (
+         SELECT 'last_year'::text AS series,
+            sum(b.value) AS sum,
+            (w.days / 7) AS week
+           FROM (backers b
+      RIGHT JOIN weeks w ON ((((b.confirmed_at)::date >= (((('now'::text)::date - w.days) - 7) - 365)) AND (b.confirmed_at < ((('now'::text)::date - w.days) - 365)))))
+     WHERE ((b.state)::text <> ALL ((ARRAY['pending'::character varying, 'canceled'::character varying, 'waiting_confirmation'::character varying, 'deleted'::character varying])::text[]))
+     GROUP BY (w.days / 7)
+        )
+        (         SELECT current_period.series,
+                    current_period.sum,
+                    current_period.week
+                   FROM current_period
+        UNION ALL
+                 SELECT previous_period.series,
+                    previous_period.sum,
+                    previous_period.week
+                   FROM previous_period)
+UNION ALL
+         SELECT last_year.series,
+            last_year.sum,
+            last_year.week
+           FROM last_year
+  ORDER BY 1, 3;
 
 
 --
@@ -481,7 +573,13 @@ ALTER SEQUENCE configurations_id_seq OWNED BY configurations.id;
 --
 
 CREATE VIEW financial_reports AS
-    SELECT p.name, u.moip_login, p.goal, expires_at(p.*) AS expires_at, p.state FROM (projects p JOIN users u ON ((u.id = p.user_id)));
+ SELECT p.name,
+    u.moip_login,
+    p.goal,
+    expires_at(p.*) AS expires_at,
+    p.state
+   FROM (projects p
+   JOIN users u ON ((u.id = p.user_id)));
 
 
 --
@@ -680,7 +778,13 @@ CREATE TABLE paypal_payments (
 --
 
 CREATE VIEW project_totals AS
-    SELECT backers.project_id, sum(backers.value) AS pledged, sum(backers.payment_service_fee) AS total_payment_service_fee, count(*) AS total_backers FROM backers WHERE ((backers.state)::text = ANY (ARRAY[('confirmed'::character varying)::text, ('refunded'::character varying)::text, ('requested_refund'::character varying)::text])) GROUP BY backers.project_id;
+ SELECT backers.project_id,
+    sum(backers.value) AS pledged,
+    sum(backers.payment_service_fee) AS total_payment_service_fee,
+    count(*) AS total_backers
+   FROM backers
+  WHERE ((backers.state)::text = ANY ((ARRAY['confirmed'::character varying, 'refunded'::character varying, 'requested_refund'::character varying])::text[]))
+  GROUP BY backers.project_id;
 
 
 --
@@ -688,7 +792,46 @@ CREATE VIEW project_totals AS
 --
 
 CREATE VIEW projects_by_periods AS
-    WITH weeks AS (SELECT (generate_series.generate_series * 7) AS days FROM generate_series(0, 7) generate_series(generate_series)), current_period AS (SELECT 'current_period'::text AS series, count(*) AS count, (w.days / 7) AS week FROM (projects p RIGHT JOIN weeks w ON ((((p.created_at)::date >= ((('now'::text)::date - w.days) - 7)) AND (p.created_at < (('now'::text)::date - w.days))))) GROUP BY (w.days / 7)), previous_period AS (SELECT 'previous_period'::text AS series, count(*) AS count, (w.days / 7) AS week FROM (projects p RIGHT JOIN weeks w ON ((((p.created_at)::date >= (((('now'::text)::date - w.days) - 7) - 56)) AND (p.created_at < ((('now'::text)::date - w.days) - 56))))) GROUP BY (w.days / 7)), last_year AS (SELECT 'last_year'::text AS series, count(*) AS count, (w.days / 7) AS week FROM (projects p RIGHT JOIN weeks w ON ((((p.created_at)::date >= (((('now'::text)::date - w.days) - 7) - 365)) AND (p.created_at < ((('now'::text)::date - w.days) - 365))))) GROUP BY (w.days / 7)) (SELECT current_period.series, current_period.count, current_period.week FROM current_period UNION ALL SELECT previous_period.series, previous_period.count, previous_period.week FROM previous_period) UNION ALL SELECT last_year.series, last_year.count, last_year.week FROM last_year ORDER BY 1, 3;
+ WITH weeks AS (
+         SELECT (generate_series.generate_series * 7) AS days
+           FROM generate_series(0, 7) generate_series(generate_series)
+        ), current_period AS (
+         SELECT 'current_period'::text AS series,
+            count(*) AS count,
+            (w.days / 7) AS week
+           FROM (projects p
+      RIGHT JOIN weeks w ON ((((p.created_at)::date >= ((('now'::text)::date - w.days) - 7)) AND (p.created_at < (('now'::text)::date - w.days)))))
+     GROUP BY (w.days / 7)
+        ), previous_period AS (
+         SELECT 'previous_period'::text AS series,
+            count(*) AS count,
+            (w.days / 7) AS week
+           FROM (projects p
+      RIGHT JOIN weeks w ON ((((p.created_at)::date >= (((('now'::text)::date - w.days) - 7) - 56)) AND (p.created_at < ((('now'::text)::date - w.days) - 56)))))
+     GROUP BY (w.days / 7)
+        ), last_year AS (
+         SELECT 'last_year'::text AS series,
+            count(*) AS count,
+            (w.days / 7) AS week
+           FROM (projects p
+      RIGHT JOIN weeks w ON ((((p.created_at)::date >= (((('now'::text)::date - w.days) - 7) - 365)) AND (p.created_at < ((('now'::text)::date - w.days) - 365)))))
+     GROUP BY (w.days / 7)
+        )
+        (         SELECT current_period.series,
+                    current_period.count,
+                    current_period.week
+                   FROM current_period
+        UNION ALL
+                 SELECT previous_period.series,
+                    previous_period.count,
+                    previous_period.week
+                   FROM previous_period)
+UNION ALL
+         SELECT last_year.series,
+            last_year.count,
+            last_year.week
+           FROM last_year
+  ORDER BY 1, 3;
 
 
 --
@@ -730,7 +873,182 @@ ALTER SEQUENCE projects_curated_pages_id_seq OWNED BY projects_curated_pages.id;
 --
 
 CREATE VIEW projects_for_home AS
-    WITH recommended_projects AS (SELECT 'recommended'::text AS origin, recommends.id, recommends.name, recommends.user_id, recommends.category_id, recommends.goal, recommends.about, recommends.headline, recommends.video_url, recommends.short_url, recommends.created_at, recommends.updated_at, recommends.about_html, recommends.recommended, recommends.home_page_comment, recommends.permalink, recommends.video_thumbnail, recommends.state, recommends.online_days, recommends.online_date, recommends.how_know, recommends.more_links, recommends.first_backers, recommends.uploaded_image, recommends.video_embed_url FROM projects recommends WHERE (recommends.recommended AND ((recommends.state)::text = 'online'::text)) ORDER BY random() LIMIT 3), recents_projects AS (SELECT 'recents'::text AS origin, recents.id, recents.name, recents.user_id, recents.category_id, recents.goal, recents.about, recents.headline, recents.video_url, recents.short_url, recents.created_at, recents.updated_at, recents.about_html, recents.recommended, recents.home_page_comment, recents.permalink, recents.video_thumbnail, recents.state, recents.online_days, recents.online_date, recents.how_know, recents.more_links, recents.first_backers, recents.uploaded_image, recents.video_embed_url FROM projects recents WHERE ((((recents.state)::text = 'online'::text) AND ((now() - recents.online_date) <= '5 days'::interval)) AND (NOT (recents.id IN (SELECT recommends.id FROM recommended_projects recommends)))) ORDER BY random() LIMIT 3), expiring_projects AS (SELECT 'expiring'::text AS origin, expiring.id, expiring.name, expiring.user_id, expiring.category_id, expiring.goal, expiring.about, expiring.headline, expiring.video_url, expiring.short_url, expiring.created_at, expiring.updated_at, expiring.about_html, expiring.recommended, expiring.home_page_comment, expiring.permalink, expiring.video_thumbnail, expiring.state, expiring.online_days, expiring.online_date, expiring.how_know, expiring.more_links, expiring.first_backers, expiring.uploaded_image, expiring.video_embed_url FROM projects expiring WHERE ((((expiring.state)::text = 'online'::text) AND (expires_at(expiring.*) <= (now() + '14 days'::interval))) AND (NOT (expiring.id IN (SELECT recommends.id FROM recommended_projects recommends UNION SELECT recents.id FROM recents_projects recents)))) ORDER BY random() LIMIT 3) (SELECT recommended_projects.origin, recommended_projects.id, recommended_projects.name, recommended_projects.user_id, recommended_projects.category_id, recommended_projects.goal, recommended_projects.about, recommended_projects.headline, recommended_projects.video_url, recommended_projects.short_url, recommended_projects.created_at, recommended_projects.updated_at, recommended_projects.about_html, recommended_projects.recommended, recommended_projects.home_page_comment, recommended_projects.permalink, recommended_projects.video_thumbnail, recommended_projects.state, recommended_projects.online_days, recommended_projects.online_date, recommended_projects.how_know, recommended_projects.more_links, recommended_projects.first_backers, recommended_projects.uploaded_image, recommended_projects.video_embed_url FROM recommended_projects UNION SELECT recents_projects.origin, recents_projects.id, recents_projects.name, recents_projects.user_id, recents_projects.category_id, recents_projects.goal, recents_projects.about, recents_projects.headline, recents_projects.video_url, recents_projects.short_url, recents_projects.created_at, recents_projects.updated_at, recents_projects.about_html, recents_projects.recommended, recents_projects.home_page_comment, recents_projects.permalink, recents_projects.video_thumbnail, recents_projects.state, recents_projects.online_days, recents_projects.online_date, recents_projects.how_know, recents_projects.more_links, recents_projects.first_backers, recents_projects.uploaded_image, recents_projects.video_embed_url FROM recents_projects) UNION SELECT expiring_projects.origin, expiring_projects.id, expiring_projects.name, expiring_projects.user_id, expiring_projects.category_id, expiring_projects.goal, expiring_projects.about, expiring_projects.headline, expiring_projects.video_url, expiring_projects.short_url, expiring_projects.created_at, expiring_projects.updated_at, expiring_projects.about_html, expiring_projects.recommended, expiring_projects.home_page_comment, expiring_projects.permalink, expiring_projects.video_thumbnail, expiring_projects.state, expiring_projects.online_days, expiring_projects.online_date, expiring_projects.how_know, expiring_projects.more_links, expiring_projects.first_backers, expiring_projects.uploaded_image, expiring_projects.video_embed_url FROM expiring_projects;
+ WITH recommended_projects AS (
+         SELECT 'recommended'::text AS origin,
+            recommends.id,
+            recommends.name,
+            recommends.user_id,
+            recommends.category_id,
+            recommends.goal,
+            recommends.about,
+            recommends.headline,
+            recommends.video_url,
+            recommends.short_url,
+            recommends.created_at,
+            recommends.updated_at,
+            recommends.about_html,
+            recommends.recommended,
+            recommends.home_page_comment,
+            recommends.permalink,
+            recommends.video_thumbnail,
+            recommends.state,
+            recommends.online_days,
+            recommends.online_date,
+            recommends.how_know,
+            recommends.more_links,
+            recommends.first_backers,
+            recommends.uploaded_image,
+            recommends.video_embed_url
+           FROM projects recommends
+          WHERE (recommends.recommended AND ((recommends.state)::text = 'online'::text))
+          ORDER BY random()
+         LIMIT 3
+        ), recents_projects AS (
+         SELECT 'recents'::text AS origin,
+            recents.id,
+            recents.name,
+            recents.user_id,
+            recents.category_id,
+            recents.goal,
+            recents.about,
+            recents.headline,
+            recents.video_url,
+            recents.short_url,
+            recents.created_at,
+            recents.updated_at,
+            recents.about_html,
+            recents.recommended,
+            recents.home_page_comment,
+            recents.permalink,
+            recents.video_thumbnail,
+            recents.state,
+            recents.online_days,
+            recents.online_date,
+            recents.how_know,
+            recents.more_links,
+            recents.first_backers,
+            recents.uploaded_image,
+            recents.video_embed_url
+           FROM projects recents
+          WHERE ((((recents.state)::text = 'online'::text) AND ((now() - recents.online_date) <= '5 days'::interval)) AND (NOT (recents.id IN ( SELECT recommends.id
+                   FROM recommended_projects recommends))))
+          ORDER BY random()
+         LIMIT 3
+        ), expiring_projects AS (
+         SELECT 'expiring'::text AS origin,
+            expiring.id,
+            expiring.name,
+            expiring.user_id,
+            expiring.category_id,
+            expiring.goal,
+            expiring.about,
+            expiring.headline,
+            expiring.video_url,
+            expiring.short_url,
+            expiring.created_at,
+            expiring.updated_at,
+            expiring.about_html,
+            expiring.recommended,
+            expiring.home_page_comment,
+            expiring.permalink,
+            expiring.video_thumbnail,
+            expiring.state,
+            expiring.online_days,
+            expiring.online_date,
+            expiring.how_know,
+            expiring.more_links,
+            expiring.first_backers,
+            expiring.uploaded_image,
+            expiring.video_embed_url
+           FROM projects expiring
+          WHERE ((((expiring.state)::text = 'online'::text) AND (expires_at(expiring.*) <= (now() + '14 days'::interval))) AND (NOT (expiring.id IN (         SELECT recommends.id
+                           FROM recommended_projects recommends
+                UNION
+                         SELECT recents.id
+                           FROM recents_projects recents))))
+          ORDER BY random()
+         LIMIT 3
+        )
+        (         SELECT recommended_projects.origin,
+                    recommended_projects.id,
+                    recommended_projects.name,
+                    recommended_projects.user_id,
+                    recommended_projects.category_id,
+                    recommended_projects.goal,
+                    recommended_projects.about,
+                    recommended_projects.headline,
+                    recommended_projects.video_url,
+                    recommended_projects.short_url,
+                    recommended_projects.created_at,
+                    recommended_projects.updated_at,
+                    recommended_projects.about_html,
+                    recommended_projects.recommended,
+                    recommended_projects.home_page_comment,
+                    recommended_projects.permalink,
+                    recommended_projects.video_thumbnail,
+                    recommended_projects.state,
+                    recommended_projects.online_days,
+                    recommended_projects.online_date,
+                    recommended_projects.how_know,
+                    recommended_projects.more_links,
+                    recommended_projects.first_backers,
+                    recommended_projects.uploaded_image,
+                    recommended_projects.video_embed_url
+                   FROM recommended_projects
+        UNION
+                 SELECT recents_projects.origin,
+                    recents_projects.id,
+                    recents_projects.name,
+                    recents_projects.user_id,
+                    recents_projects.category_id,
+                    recents_projects.goal,
+                    recents_projects.about,
+                    recents_projects.headline,
+                    recents_projects.video_url,
+                    recents_projects.short_url,
+                    recents_projects.created_at,
+                    recents_projects.updated_at,
+                    recents_projects.about_html,
+                    recents_projects.recommended,
+                    recents_projects.home_page_comment,
+                    recents_projects.permalink,
+                    recents_projects.video_thumbnail,
+                    recents_projects.state,
+                    recents_projects.online_days,
+                    recents_projects.online_date,
+                    recents_projects.how_know,
+                    recents_projects.more_links,
+                    recents_projects.first_backers,
+                    recents_projects.uploaded_image,
+                    recents_projects.video_embed_url
+                   FROM recents_projects)
+UNION
+         SELECT expiring_projects.origin,
+            expiring_projects.id,
+            expiring_projects.name,
+            expiring_projects.user_id,
+            expiring_projects.category_id,
+            expiring_projects.goal,
+            expiring_projects.about,
+            expiring_projects.headline,
+            expiring_projects.video_url,
+            expiring_projects.short_url,
+            expiring_projects.created_at,
+            expiring_projects.updated_at,
+            expiring_projects.about_html,
+            expiring_projects.recommended,
+            expiring_projects.home_page_comment,
+            expiring_projects.permalink,
+            expiring_projects.video_thumbnail,
+            expiring_projects.state,
+            expiring_projects.online_days,
+            expiring_projects.online_date,
+            expiring_projects.how_know,
+            expiring_projects.more_links,
+            expiring_projects.first_backers,
+            expiring_projects.uploaded_image,
+            expiring_projects.video_embed_url
+           FROM expiring_projects;
 
 
 --
@@ -757,7 +1075,33 @@ ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 --
 
 CREATE VIEW recommendations AS
-    SELECT recommendations.user_id, recommendations.project_id, recommendations.count FROM (SELECT b.user_id, recommendations.id AS project_id, count(DISTINCT recommenders.user_id) AS count FROM ((((backers b JOIN projects p ON ((p.id = b.project_id))) JOIN backers backers_same_projects ON ((p.id = backers_same_projects.project_id))) JOIN backers recommenders ON ((recommenders.user_id = backers_same_projects.user_id))) JOIN projects recommendations ON ((recommendations.id = recommenders.project_id))) WHERE ((((((((b.state)::text = 'confirmed'::text) AND ((backers_same_projects.state)::text = 'confirmed'::text)) AND ((recommenders.state)::text = 'confirmed'::text)) AND (b.user_id <> backers_same_projects.user_id)) AND (recommendations.id <> b.project_id)) AND ((recommendations.state)::text = 'online'::text)) AND (NOT (EXISTS (SELECT true AS bool FROM backers b2 WHERE ((((b2.state)::text = 'confirmed'::text) AND (b2.user_id = b.user_id)) AND (b2.project_id = recommendations.id)))))) GROUP BY b.user_id, recommendations.id UNION SELECT b.user_id, recommendations.id AS project_id, 0 AS count FROM ((backers b JOIN projects p ON ((b.project_id = p.id))) JOIN projects recommendations ON ((recommendations.category_id = p.category_id))) WHERE ((b.state)::text = 'confirmed'::text)) recommendations WHERE (NOT (EXISTS (SELECT true AS bool FROM backers b2 WHERE ((((b2.state)::text = 'confirmed'::text) AND (b2.user_id = recommendations.user_id)) AND (b2.project_id = recommendations.project_id))))) ORDER BY recommendations.count DESC;
+ SELECT recommendations.user_id,
+    recommendations.project_id,
+    recommendations.count
+   FROM (         SELECT b.user_id,
+                    recommendations_1.id AS project_id,
+                    count(DISTINCT recommenders.user_id) AS count
+                   FROM ((((backers b
+              JOIN projects p ON ((p.id = b.project_id)))
+         JOIN backers backers_same_projects ON ((p.id = backers_same_projects.project_id)))
+    JOIN backers recommenders ON ((recommenders.user_id = backers_same_projects.user_id)))
+   JOIN projects recommendations_1 ON ((recommendations_1.id = recommenders.project_id)))
+  WHERE ((((((((b.state)::text = 'confirmed'::text) AND ((backers_same_projects.state)::text = 'confirmed'::text)) AND ((recommenders.state)::text = 'confirmed'::text)) AND (b.user_id <> backers_same_projects.user_id)) AND (recommendations_1.id <> b.project_id)) AND ((recommendations_1.state)::text = 'online'::text)) AND (NOT (EXISTS ( SELECT true AS bool
+       FROM backers b2
+      WHERE ((((b2.state)::text = 'confirmed'::text) AND (b2.user_id = b.user_id)) AND (b2.project_id = recommendations_1.id))))))
+  GROUP BY b.user_id, recommendations_1.id
+        UNION
+                 SELECT b.user_id,
+                    recommendations_1.id AS project_id,
+                    0 AS count
+                   FROM ((backers b
+              JOIN projects p ON ((b.project_id = p.id)))
+         JOIN projects recommendations_1 ON ((recommendations_1.category_id = p.category_id)))
+        WHERE ((b.state)::text = 'confirmed'::text)) recommendations
+  WHERE (NOT (EXISTS ( SELECT true AS bool
+           FROM backers b2
+          WHERE ((((b2.state)::text = 'confirmed'::text) AND (b2.user_id = recommendations.user_id)) AND (b2.project_id = recommendations.project_id)))))
+  ORDER BY recommendations.count DESC;
 
 
 --
@@ -870,7 +1214,32 @@ ALTER SEQUENCE states_id_seq OWNED BY states.id;
 --
 
 CREATE VIEW statistics AS
-    SELECT (SELECT count(*) AS count FROM users) AS total_users, backers_totals.total_backs, backers_totals.total_backers, backers_totals.total_backed, projects_totals.total_projects, projects_totals.total_projects_success, projects_totals.total_projects_online FROM (SELECT count(*) AS total_backs, count(DISTINCT backers.user_id) AS total_backers, sum(backers.value) AS total_backed FROM backers WHERE ((backers.state)::text <> ALL (ARRAY[('waiting_confirmation'::character varying)::text, ('pending'::character varying)::text, ('canceled'::character varying)::text, 'deleted'::text]))) backers_totals, (SELECT count(*) AS total_projects, count(CASE WHEN ((projects.state)::text = 'successful'::text) THEN 1 ELSE NULL::integer END) AS total_projects_success, count(CASE WHEN ((projects.state)::text = 'online'::text) THEN 1 ELSE NULL::integer END) AS total_projects_online FROM projects WHERE ((projects.state)::text <> ALL (ARRAY[('draft'::character varying)::text, ('rejected'::character varying)::text]))) projects_totals;
+ SELECT ( SELECT count(*) AS count
+           FROM users) AS total_users,
+    backers_totals.total_backs,
+    backers_totals.total_backers,
+    backers_totals.total_backed,
+    projects_totals.total_projects,
+    projects_totals.total_projects_success,
+    projects_totals.total_projects_online
+   FROM ( SELECT count(*) AS total_backs,
+            count(DISTINCT backers.user_id) AS total_backers,
+            sum(backers.value) AS total_backed
+           FROM backers
+          WHERE ((backers.state)::text <> ALL (ARRAY[('waiting_confirmation'::character varying)::text, ('pending'::character varying)::text, ('canceled'::character varying)::text, 'deleted'::text]))) backers_totals,
+    ( SELECT count(*) AS total_projects,
+            count(
+                CASE
+                    WHEN ((projects.state)::text = 'successful'::text) THEN 1
+                    ELSE NULL::integer
+                END) AS total_projects_success,
+            count(
+                CASE
+                    WHEN ((projects.state)::text = 'online'::text) THEN 1
+                    ELSE NULL::integer
+                END) AS total_projects_online
+           FROM projects
+          WHERE ((projects.state)::text <> ALL (ARRAY[('draft'::character varying)::text, ('rejected'::character varying)::text]))) projects_totals;
 
 
 --
@@ -878,7 +1247,12 @@ CREATE VIEW statistics AS
 --
 
 CREATE VIEW subscriber_reports AS
-    SELECT u.id, cs.channel_id, u.name, u.email FROM (users u JOIN channels_subscribers cs ON ((cs.user_id = u.id)));
+ SELECT u.id,
+    cs.channel_id,
+    u.name,
+    u.email
+   FROM (users u
+   JOIN channels_subscribers cs ON ((cs.user_id = u.id)));
 
 
 --
@@ -966,7 +1340,23 @@ ALTER SEQUENCE updates_id_seq OWNED BY updates.id;
 --
 
 CREATE VIEW user_totals AS
-    SELECT b.user_id AS id, b.user_id, count(DISTINCT b.project_id) AS total_backed_projects, sum(b.value) AS sum, count(*) AS count, sum(CASE WHEN (((p.state)::text <> 'failed'::text) AND (NOT b.credits)) THEN (0)::numeric WHEN (((p.state)::text = 'failed'::text) AND b.credits) THEN (0)::numeric WHEN (((p.state)::text = 'failed'::text) AND ((((b.state)::text = ANY (ARRAY[('requested_refund'::character varying)::text, ('refunded'::character varying)::text])) AND (NOT b.credits)) OR (b.credits AND (NOT ((b.state)::text = ANY (ARRAY[('requested_refund'::character varying)::text, ('refunded'::character varying)::text])))))) THEN (0)::numeric WHEN ((((p.state)::text = 'failed'::text) AND (NOT b.credits)) AND ((b.state)::text = 'confirmed'::text)) THEN b.value ELSE (b.value * ((-1))::numeric) END) AS credits FROM (backers b JOIN projects p ON ((b.project_id = p.id))) WHERE ((b.state)::text = ANY (ARRAY[('confirmed'::character varying)::text, ('requested_refund'::character varying)::text, ('refunded'::character varying)::text])) GROUP BY b.user_id;
+ SELECT b.user_id AS id,
+    b.user_id,
+    count(DISTINCT b.project_id) AS total_backed_projects,
+    sum(b.value) AS sum,
+    count(*) AS count,
+    sum(
+        CASE
+            WHEN (((p.state)::text <> 'failed'::text) AND (NOT b.credits)) THEN (0)::numeric
+            WHEN (((p.state)::text = 'failed'::text) AND b.credits) THEN (0)::numeric
+            WHEN (((p.state)::text = 'failed'::text) AND ((((b.state)::text = ANY ((ARRAY['requested_refund'::character varying, 'refunded'::character varying])::text[])) AND (NOT b.credits)) OR (b.credits AND (NOT ((b.state)::text = ANY ((ARRAY['requested_refund'::character varying, 'refunded'::character varying])::text[])))))) THEN (0)::numeric
+            WHEN ((((p.state)::text = 'failed'::text) AND (NOT b.credits)) AND ((b.state)::text = 'confirmed'::text)) THEN b.value
+            ELSE (b.value * ((-1))::numeric)
+        END) AS credits
+   FROM (backers b
+   JOIN projects p ON ((b.project_id = p.id)))
+  WHERE ((b.state)::text = ANY ((ARRAY['confirmed'::character varying, 'requested_refund'::character varying, 'refunded'::character varying])::text[]))
+  GROUP BY b.user_id;
 
 
 --
