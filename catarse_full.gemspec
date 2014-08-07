@@ -139,6 +139,7 @@ Gem::Specification.new do |s|
     'coffee-rails',
     'compass-960-plugin',
     "compass-rails",
+    ['sass', '~> 3.2.18'], # see http://stackoverflow.com/a/21118300
     'sass-rails',
     'uglifier'
   ]
