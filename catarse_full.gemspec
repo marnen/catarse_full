@@ -58,7 +58,7 @@ Gem::Specification.new do |s|
     'draper',
 
     # Frontend stuff
-    ['slim-rails', '~> 1.1.1'],
+    ['slim', '>= 1.3.9'],
     'jquery-rails',
 
     # Authentication and Authorization
@@ -150,7 +150,8 @@ Gem::Specification.new do |s|
     'factory_girl_rails',
     'guard-rspec',
     'pg',
-    'rspec-rails'
+    'rspec-rails',
+    ['slim-rails', '~> 1.1.1']
   ]
 
   dependencies.values_at(:runtime, :production, :doubtful, :assets).flatten(1).each {|gem| s.add_dependency *gem }
