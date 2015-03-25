@@ -149,7 +149,6 @@ Gem::Specification.new do |s|
     'capybara',
     'factory_girl_rails',
     'guard-rspec',
-    'pg',
     'rspec-rails',
     ['slim-rails', '~> 1.1.1']
   ]
